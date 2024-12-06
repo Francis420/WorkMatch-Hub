@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Employer Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Employer Profile</h1>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ profile.employer_name }}</h5>
+            <p class="card-text">Email: {{ profile.user.email }}</p>
+            <p class="card-text">Company Description: {{ profile.company_description }}</p>
+            <p class="card-text">Industry: {{ profile.industry }}</p>
+            <p class="card-text">Website: <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
+            <p class="card-text">Contact Person: {{ profile.contact_person }}</p>
+            <p class="card-text">Contact Number: {{ profile.contact_number }}</p>
+            <p class="card-text">Facebook: <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a></p>
+            <!-- Add more fields as needed -->
+            <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

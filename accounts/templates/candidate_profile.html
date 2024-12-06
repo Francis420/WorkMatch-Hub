@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Candidate Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">{{ candidate.username }}'s Profile</h1>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    {% if candidate.profile.profile_picture %}
+                        <img src="{{ candidate.profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <p><strong>Full Name:</strong> {{ candidate.profile.full_name }}</p>
+                    <p><strong>Email:</strong> {{ candidate.email }}</p>
+                    <p><strong>Skills:</strong> {{ candidate.profile.skills }}</p>
+                    <p><strong>Experience:</strong> {{ candidate.profile.experience }}</p>
+                    <p><strong>Education:</strong> {{ candidate.profile.education }}</p>
+                    <p><strong>Location:</strong> {{ candidate.profile.location }}</p>
+                    <p><strong>Job Preferences:</strong> {{ candidate.profile.job_preferences }}</p>
+                    <p><strong>Availability:</strong> {{ candidate.profile.availability }}</p>
+                    <p><strong>Contact Number:</strong> {{ candidate.profile.contact_number }}</p>
+                    <p><strong>Facebook:</strong> <a href="{{ candidate.profile.facebook_link }}" target="_blank">{{ candidate.profile.facebook_link }}</a></p>
+                    {% if candidate.profile.resume %}
+                        <a href="{{ candidate.profile.resume.url }}" target="_blank" class="btn btn-secondary mt-2">Show Resume</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

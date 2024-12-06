@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Job Seeker Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Job Seeker Profile</h1>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
+                    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                    <p><strong>Skills:</strong> {{ profile.skills }}</p>
+                    <p><strong>Experience:</strong> {{ profile.experience }}</p>
+                    <p><strong>Education:</strong> {{ profile.education }}</p>
+                    <p><strong>Location:</strong> {{ profile.location }}</p>
+                    <p><strong>Job Preferences:</strong> {{ profile.job_preferences }}</p>
+                    <p><strong>Availability:</strong> {{ profile.availability }}</p>
+                    <p><strong>Contact Number:</strong> {{ profile.contact_number }}</p>
+                    <p><strong>Facebook:</strong> <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a></p>
+                </div>
+            </div>
+            {% if profile.resume %}
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <a href="{{ profile.resume.url }}" class="btn btn-secondary mt-2">Download Resume</a>
+                    </div>
+                </div>
+            {% endif %}
+            <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
