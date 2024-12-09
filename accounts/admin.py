@@ -1,8 +1,8 @@
-# Register your models here.
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, JobPost, JobAlert, Profile, Feedback
+from .models import CustomUser, Profile
+from feedback.models import Feedback
+from jobs.models import JobPost, JobAlert
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -14,8 +14,8 @@ class CustomUserAdmin(UserAdmin):
         ('Roles', {'fields': ('is_job_seeker', 'is_employer', 'company_name')}),
     )
 
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(JobPost)
-admin.site.register(JobAlert)
+admin.site.register(CustomUser)
 admin.site.register(Profile)
 admin.site.register(Feedback)
+admin.site.register(JobPost)
+admin.site.register(JobAlert)

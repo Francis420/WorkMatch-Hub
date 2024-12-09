@@ -40,9 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
+    'jobs',
+    'candidates',
     'crispy_forms',
+    'feedback',
     'crispy_bootstrap4',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,7 +65,7 @@ ROOT_URLCONF = 'workmatch_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,8 +86,12 @@ WSGI_APPLICATION = 'workmatch_hub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'workmatch_hub',  
+        'USER': 'root',       
+        'PASSWORD': '123456789',   
+        'HOST': 'localhost',           
+        'PORT': '3307',                
     }
 }
 

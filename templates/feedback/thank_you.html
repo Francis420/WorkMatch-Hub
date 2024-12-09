@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Thank You | WorkMatch Hub{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Thank You!</h1>
+        <p>Your feedback has been submitted successfully.</p>
+        <p>You will be redirected to the homepage shortly.</p>
+    </div>
+    <script>
+        setTimeout(function() {
+            window.location.href = "{% url 'home' %}";
+        }, 5000);
+    </script>
+{% endblock %}

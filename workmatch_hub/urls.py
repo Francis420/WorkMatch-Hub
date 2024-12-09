@@ -24,6 +24,9 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('jobs/', include('jobs.urls')),
+    path('feedback/', include('feedback.urls')),
+    path('candidates/', include('candidates.urls')),
     path('', views.home, name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

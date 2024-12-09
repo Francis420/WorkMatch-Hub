@@ -41,6 +41,15 @@
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             {% if user.is_authenticated %}
+                                {% if user.is_job_seeker %}
+                                    <li class="nav-item"><a href="{% url 'job_seeker_profile' %}" class="nav-link">Profile</a></li>
+                                    <li class="nav-item"><a href="{% url 'edit_job_seeker_profile' %}" class="nav-link">Update Profile</a></li>
+                                {% elif user.is_employer %}
+                                    <li class="nav-item"><a href="{% url 'employer_profile' %}" class="nav-link">Profile</a></li>
+                                    <li class="nav-item"><a href="{% url 'edit_employer_profile' %}" class="nav-link">Update Profile</a></li>
+                                {% endif %}
+                                <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
+                                <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>
                                 <li class="nav-item">
                                     <form method="post" action="{% url 'logout' %}" class="d-inline">
                                         {% csrf_token %}
