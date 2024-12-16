@@ -38,3 +38,13 @@ class JobAlert(models.Model):
 
     def __str__(self):
         return f"{self.job_title} in {self.location}" if self.job_title and self.location else "Job Alert"
+
+class Application(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    job_post = models.ForeignKey('JobPost', on_delete=models.CASCADE)
+    cover_letter = models.TextField()
+    resume = models.FileField(upload_to='resumes/')
+    applied_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.job_post.title}"

@@ -7,4 +7,5 @@ urlpatterns = [
     path('job_search/', views.job_search, name='job_search'),
     path('job_alerts/', views.job_alerts, name='job_alerts'),
     path('job/<int:job_id>/', views.job_detail, name='job_detail'),
+    path('jobs/<int:job_id>/apply/', views.apply_for_job, name='apply_for_job'),
 ]

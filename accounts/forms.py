@@ -52,3 +52,8 @@ class EmployerProfileForm(forms.ModelForm):
             'employer_name', 'company_logo', 'company_description', 'industry',
             'website', 'contact_person', 'contact_number', 'facebook_link'
         ]
+
+class AdminCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'is_staff', 'is_superuser')

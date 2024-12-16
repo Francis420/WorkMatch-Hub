@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Audit Log</h2>
+  <form method="get" class="mb-3">
+    <div class="row">
+      <div class="col-md-2">
+        <input type="text" name="user" class="form-control" placeholder="User..." value="{{ user_filter }}">
+      </div>
+      <div class="col-md-2">
+        <input type="text" name="action" class="form-control" placeholder="Action..." value="{{ action_filter }}">
+      </div>
+      <div class="col-md-2">
+        <input type="datetime-local" name="start_date" class="form-control" value="{{ start_date|date:'Y-m-d\TH:i' }}">
+      </div>
+      <div class="col-md-2">
+        <input type="datetime-local" name="end_date" class="form-control" value="{{ end_date|date:'Y-m-d\TH:i' }}">
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+  </form>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Action</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.user.username }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.timestamp }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

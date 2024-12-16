@@ -1,9 +1,12 @@
 import logging
-from django.utils.deprecation import MiddlewareMixin
+logger = logging.getLogger('workmatch_hub')
 
-logger = logging.getLogger(__name__)
+class ActivityLoggingMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-class ActivityLoggingMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+    def __call__(self, request):
+        response = self.get_response(request)
         if request.user.is_authenticated:
-            logger.info(f'User {request.user.username} accessed {request.path}')
+            logger.info(f"User {request.user.username} accessed {request.path}")
+        return response

@@ -1,20 +1,23 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Profile
+from .models import CustomUser, Profile, AuditLog
 from feedback.models import Feedback
 from jobs.models import JobPost, JobAlert
 
 class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    list_display = ['username', 'email', 'is_job_seeker', 'is_employer', 'is_active']
-    list_filter = ['is_job_seeker', 'is_employer', 'is_active']
-    fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        ('Roles', {'fields': ('is_job_seeker', 'is_employer', 'company_name')}),
-    )
+    list_display = ('username', 'email', 'is_active', 'is_staff', 'is_job_seeker', 'is_employer')
+    actions = ['activate_users', 'deactivate_users']
 
-admin.site.register(CustomUser)
+    def activate_users(self, request, queryset):
+        queryset.update(is_active=True)
+    activate_users.short_description = "Activate selected users"
+
+    def deactivate_users(self, request, queryset):
+        queryset.update(is_active=False)
+    deactivate_users.short_description = "Deactivate selected users"
+
+admin.site.register(AuditLog)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Profile)
 admin.site.register(Feedback)
 admin.site.register(JobPost)

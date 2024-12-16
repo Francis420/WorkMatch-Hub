@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>User Management</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.is_active|yesno:"Active,Inactive" }}</td>
+          <td>
+            {% if user.is_active %}
+              <a href="{% url 'suspend_user' user.id %}" class="btn btn-warning">Suspend</a>
+            {% else %}
+              <a href="{% url 'activate_user' user.id %}" class="btn btn-success">Activate</a>
+            {% endif %}
+            <a href="{% url 'delete_user' user.id %}" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
