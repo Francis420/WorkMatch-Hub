@@ -10,6 +10,9 @@ import logging
 from fuzzywuzzy import fuzz
 from notifications.utils import notify
 from .models import Application
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -22,14 +25,35 @@ def post_job(request):
             job_post = form.save(commit=False)
             job_post.employer = request.user
             job_post.save()
+            send_job_alerts()  # Call the function to send job alerts
             return redirect('job_list')
     else:
         form = JobPostForm()
     return render(request, 'jobs/post_job.html', {'form': form})
 
-def job_list(request):
+@login_required
+def update_job(request, job_id):
+    job = get_object_or_404(JobPost, id=job_id)
+    if request.method == 'POST':
+        form = JobPostForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return redirect('posted_job')
+    else:
+        form = JobPostForm(instance=job)
+    return render(request, 'jobs/update_job.html', {'form': form})
+
+@login_required
+def delete_job(request, job_id):
+    job = get_object_or_404(JobPost, id=job_id)
+    if request.method == 'POST':
+        job.delete()
+        return redirect('posted_job')
+    return render(request, 'jobs/delete_job.html', {'job': job})
+
+def posted_job(request):
     job_posts = JobPost.objects.all()
-    return render(request, 'jobs/job_list.html', {'job_posts': job_posts})
+    return render(request, 'jobs/posted_job.html', {'job_posts': job_posts})
 
 def job_search(request):
     form = JobSearchForm(request.GET or None)
@@ -66,35 +90,72 @@ def job_detail(request, job_id):
 
 @login_required
 def job_alerts(request):
+    try:
+        job_alert = JobAlert.objects.get(user=request.user)
+    except JobAlert.DoesNotExist:
+        job_alert = None
+
     if request.method == 'POST':
-        form = JobAlertForm(request.POST)
+        form = JobAlertForm(request.POST, instance=job_alert)
         if form.is_valid():
             job_alert = form.save(commit=False)
             job_alert.user = request.user
             job_alert.save()
             return redirect('job_alerts')
     else:
-        form = JobAlertForm()
+        form = JobAlertForm(instance=job_alert)
+
     return render(request, 'jobs/job_alerts.html', {'form': form})
 
 def send_job_alerts():
     alerts = JobAlert.objects.all()
+
     for alert in alerts:
         jobs = JobPost.objects.all()
-        matching_jobs = []
+        matching_jobs = {}
 
         for job in jobs:
-            title_match = fuzz.partial_ratio(alert.job_title.lower(), job.title.lower()) > 80 if alert.job_title else True
-            location_match = fuzz.partial_ratio(alert.location.lower(), job.location.lower()) > 80 if alert.location else True
-            industry_match = fuzz.partial_ratio(alert.industry.lower(), job.industry.lower()) > 80 if alert.industry else True
+            # Skip jobs that have already been notified
+            if job.id in alert.notified_jobs:
+                continue
 
-            if title_match or location_match or industry_match:
-                matching_jobs.append(job)
+            # Use exact match for location
+            location_match = alert.location.lower() == job.location.lower() if alert.location else True
+
+            # Use TF-IDF and cosine similarity for job title and description
+            vectorizer = TfidfVectorizer().fit_transform([alert.job_title, job.title, alert.job_description, job.description])
+            vectors = vectorizer.toarray()
+            title_similarity = cosine_similarity([vectors[0]], [vectors[1]])[0][0] if alert.job_title else 1
+            description_similarity = cosine_similarity([vectors[2]], [vectors[3]])[0][0] if alert.job_description else 1
+
+            # Define a threshold for similarity
+            title_threshold = 0.8
+            description_threshold = 0.8
+
+            title_match = title_similarity >= title_threshold
+            description_match = description_similarity >= description_threshold
+
+            if location_match or title_match or description_match:
+                match_details = []
+                if title_match:
+                    match_details.append("title")
+                if description_match:
+                    match_details.append("description")
+                if location_match:
+                    match_details.append("location")
+                match_details_str = ", ".join(match_details)
+
+                if job not in matching_jobs:
+                    matching_jobs[job] = match_details_str
+                else:
+                    existing_match_details = matching_jobs[job].split(", ")
+                    combined_match_details = list(set(existing_match_details + match_details))
+                    matching_jobs[job] = ", ".join(combined_match_details)
 
         if matching_jobs:
             message = "Here are the latest job postings matching your preferences:\n"
-            for job in matching_jobs:
-                message += f"{job.title} in {job.location} - {job.salary}\n"
+            for job, match_details_str in matching_jobs.items():
+                message += f"{job.title} in {job.location} - {job.salary} (matched on: {match_details_str})\n"
             send_mail(
                 'Job Alerts',
                 message,
@@ -102,6 +163,21 @@ def send_job_alerts():
                 [alert.user.email],
                 fail_silently=False,
             )
+
+            # Create real-time notifications
+            for job, match_details_str in matching_jobs.items():
+                if job.id not in alert.notified_jobs:
+                    notification = notify(
+                        sender=job.employer,
+                        recipient=alert.user,
+                        verb=f"New job alert: {job.title} in {job.location} (matched on: {match_details_str})",
+                        target=job
+                    )
+                    logger.info(f"Notification created: {notification}, Recipient: {alert.user.username}, Job: {job.title}")
+                    alert.notified_jobs.append(job.id)
+                    alert.save()
+                else:
+                    logger.info(f"Notification already exists for user: {alert.user.username}, Job: {job.title}")
 
 def apply_for_job(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)

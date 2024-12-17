@@ -4,7 +4,7 @@ from asgiref.sync import async_to_sync
 
 def notify(sender, recipient, verb, target=None):
     notification = Notification.objects.create(
-        sender=sender,  # Add this line to set the sender
+        sender=sender,
         recipient=recipient,
         verb=verb,
         target=target
@@ -17,4 +17,4 @@ def notify(sender, recipient, verb, target=None):
             "message": verb
         }
     )
-    return notification  # Ensure the function returns the notification
+    return notification

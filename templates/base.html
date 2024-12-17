@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,12 +63,14 @@
                                     <li class="nav-item"><a href="{% url 'job_search' %}" class="nav-link">Search Jobs</a></li>
                                     <li class="nav-item"><a href="{% url 'job_seeker_profile' pk=user.id %}" class="nav-link">Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'edit_job_seeker_profile' %}" class="nav-link">Update Profile</a></li>
+                                    <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
                                 {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'candidate_search' %}" class="nav-link">Browse Applicants</a></li>
                                     <li class="nav-item"><a href="{% url 'post_job' %}" class="nav-link">Post Job</a></li>
+                                    <li class="nav-item"><a href="{% url 'posted_job' %}" class="nav-link">Your Job Posts</a></li>
                                     <li class="nav-item"><a href="{% url 'edit_employer_profile' %}" class="nav-link">Update Profile</a></li>
+                                    <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
                                 {% endif %}
-                                <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
                                 <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>
                                 <li class="nav-item">
                                     <a href="{% url 'notifications' %}">
@@ -80,9 +83,9 @@
                                     <li class="nav-item"><a href="{% url 'user_list' %}" class="nav-link">User Management</a></li>
                                 {% endif %}
                                 <li class="nav-item">
-                                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                    <form method="post" action="{% url 'logout' %}" class="d-inline" id="logout-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-link nav-link">Logout</button>
+                                        <button type="submit" class="btn btn-link nav-link" id="logout-button">Logout</button>
                                     </form>
                                 </li>
                             {% else %}
@@ -130,6 +133,14 @@
         notificationSocket.onclose = function(e) {
             console.error('Notification socket closed unexpectedly');
         };
+
+        // Add confirmation dialog for logout
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                document.getElementById('logout-form').submit();
+            }
+        });
     </script>
     {% endif %}
 </body>

@@ -15,6 +15,7 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from fuzzywuzzy import fuzz
+from notifications.utils import notify
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -171,6 +172,14 @@ def send_employer_notifications():
                     settings.EMAIL_HOST_USER,
                     [job.employer.email],
                     fail_silently=False,
+                )
+
+                # Create real-time notifications
+                notify(
+                    sender=candidate,
+                    recipient=job.employer,
+                    verb=f"New candidate match: {candidate.username} for your job posting {job.title}",
+                    target=job
                 )
 
 class Command(BaseCommand):

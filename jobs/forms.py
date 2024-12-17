@@ -43,4 +43,4 @@ class JobAlertForm(forms.ModelForm):
 
     class Meta:
         model = JobAlert
-        fields = ['job_title', 'location', 'industry']
+        fields = ['job_title', 'job_description', 'location']

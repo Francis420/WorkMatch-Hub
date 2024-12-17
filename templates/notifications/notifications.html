@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Notifications{% endblock %}
 
@@ -8,46 +9,109 @@
 <ul id="notification-list" class="list-group">
     {% for notification in notifications %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                {% if notification.sender %}
-                    {{ notification.sender.username }} has applied for your job posting: {{ notification.target.title }}
-                {% else %}
-                    <span class="text-danger">Sender not available</span>
-                {% endif %}
-                <span>{{ notification.timestamp }}</span>
-            </div>
-            <div>
-                {% if notification.sender and notification.sender.id %}
-                    <a href="{% url 'job_seeker_profile' pk=notification.sender.id %}" class="btn btn-sm btn-primary">Show Profile</a>
-                {% else %}
-                    <span class="text-muted">Profile not available</span>
-                {% endif %}
-                {% if not notification.read %}
-                    <button class="btn btn-sm btn-secondary mark-read" data-id="{{ notification.id }}">Mark as Read</button>
-                {% endif %}
+            <div class="row w-100">
+                <div class="col-md-4">
+                    {% if notification.sender %}
+                        {% if "job alert" in notification.verb %}
+                            {{ notification.verb }}
+                        {% else %}
+                            {{ notification.sender.username }} has applied for your job posting: {{ notification.target.title }}
+                        {% endif %}
+                    {% else %}
+                        <span class="text-danger">Sender not available</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-center">
+                    <span>{{ notification.timestamp }}</span>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if notification.sender and notification.sender.id %}
+                        {% if "job alert" in notification.verb %}
+                            <a href="{% url 'job_detail' notification.target.id %}" class="btn btn-sm btn-primary view-job">View Job</a>
+                        {% else %}
+                            <a href="{% url 'job_seeker_profile' notification.sender.id %}" class="btn btn-sm btn-primary show-profile">Show Profile</a>
+                        {% endif %}
+                    {% else %}
+                        <span class="text-muted">Profile not available</span>
+                    {% endif %}
+                    {% if not notification.read %}
+                        <button class="btn btn-sm btn-secondary mark-read" data-id="{{ notification.id }}">Mark as Read</button>
+                    {% else %}
+                        <button class="btn btn-sm btn-secondary mark-unread" data-id="{{ notification.id }}">Mark as Unread</button>
+                    {% endif %}
+                </div>
             </div>
         </li>
     {% endfor %}
 </ul>
 
 <script>
-    document.querySelectorAll('.mark-read').forEach(button => {
-        button.addEventListener('click', function() {
-            const notificationId = this.getAttribute('data-id');
-            fetch(`/notifications/mark_read/${notificationId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    this.parentElement.remove();
-                    const notificationCount = document.getElementById('notification-count');
-                    notificationCount.textContent = parseInt(notificationCount.textContent) - 1;
-                }
+    function getCSRFToken() {
+        let csrfToken = null;
+        const cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrftoken') {
+                csrfToken = value;
+            }
+        });
+        return csrfToken;
+    }
+
+    function updateNotificationCount() {
+        const countElement = document.getElementById('notification-count');
+        const unreadCount = document.querySelectorAll('.mark-read').length;
+        countElement.textContent = unreadCount;
+    }
+
+    function addMarkReadListeners() {
+        document.querySelectorAll('.mark-read').forEach(button => {
+            button.addEventListener('click', function() {
+                const notificationId = this.getAttribute('data-id');
+                fetch(`{% url 'mark_read' 0 %}`.replace('0', notificationId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        this.classList.remove('mark-read');
+                        this.classList.add('mark-unread');
+                        this.textContent = 'Mark as Unread';
+                        addMarkUnreadListeners();
+                        updateNotificationCount();
+                    }
+                });
             });
         });
-    });
+    }
+
+    function addMarkUnreadListeners() {
+        document.querySelectorAll('.mark-unread').forEach(button => {
+            button.addEventListener('click', function() {
+                const notificationId = this.getAttribute('data-id');
+                fetch(`{% url 'mark_unread' 0 %}`.replace('0', notificationId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        this.classList.remove('mark-unread');
+                        this.classList.add('mark-read');
+                        this.textContent = 'Mark as Read';
+                        addMarkReadListeners();
+                        updateNotificationCount();
+                    }
+                });
+            });
+        });
+    }
+
+    addMarkReadListeners();
+    addMarkUnreadListeners();
+    updateNotificationCount();
 </script>
 {% endblock %}

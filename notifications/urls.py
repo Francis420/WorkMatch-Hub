@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from .views import notifications_view, mark_read, mark_unread
 
 urlpatterns = [
-    path('', views.notifications_view, name='notifications'),
-    path('mark_read/<int:pk>/', views.mark_notification_as_read, name='mark_read'),
+    path('', notifications_view, name='notifications'),
+    path('mark_read/<int:notification_id>/', mark_read, name='mark_read'),
+    path('mark_unread/<int:notification_id>/', mark_unread, name='mark_unread'),
 ]

@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Notification
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
 
 @login_required
 def notifications_view(request):
@@ -8,7 +11,23 @@ def notifications_view(request):
     return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
 @login_required
-def mark_notification_as_read(request, pk):
-    notification = get_object_or_404(Notification, pk=pk, recipient=request.user)
-    notification.mark_as_read()
-    return redirect('notifications')
+@require_POST
+def mark_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, recipient=request.user)
+        notification.read = True
+        notification.save()
+        return JsonResponse({'status': 'success'})
+    except Notification.DoesNotExist:
+        return JsonResponse({'status': 'error'}, status=404)
+
+@login_required
+@require_POST
+def mark_unread(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, recipient=request.user)
+        notification.read = False
+        notification.save()
+        return JsonResponse({'status': 'success'})
+    except Notification.DoesNotExist:
+        return JsonResponse({'status': 'error'}, status=404)

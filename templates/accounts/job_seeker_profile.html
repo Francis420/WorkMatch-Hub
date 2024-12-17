@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Job Seeker Profile{% endblock %}
 
@@ -36,7 +37,13 @@
                     </div>
                 </div>
             {% endif %}
-            <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+            {% if user.is_authenticated %}
+                {% if user.is_job_seeker %}
+                    <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+                {% else %}
+                    <a href="{% url 'notifications' %}" class="btn btn-primary mt-3">Back to Notifications</a> 
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>

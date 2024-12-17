@@ -30,14 +30,15 @@ class JobPost(models.Model):
 
 
 class JobAlert(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     job_title = models.CharField(max_length=255, blank=True, null=True)
+    job_description = models.CharField(max_length=255, blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
-    industry = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    notified_jobs = models.JSONField(default=list)
 
     def __str__(self):
-        return f"{self.job_title} in {self.location}" if self.job_title and self.location else "Job Alert"
+        return f"{self.user.username}'s Job Alert"
 
 class Application(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

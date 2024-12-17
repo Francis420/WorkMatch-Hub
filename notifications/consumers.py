@@ -1,5 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+import logging
+
+logger = logging.getLogger('workmatch_hub')
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -15,12 +18,14 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             )
 
             await self.accept()
+            logger.info(f"WebSocket connected for user: {self.user.username}")
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.group_name,
             self.channel_name
         )
+        logger.info(f"WebSocket disconnected for user: {self.user.username}")
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -40,3 +45,4 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": message
         }))
+        logger.info(f"Notification sent to user: {self.user.username}, Message: {message}")

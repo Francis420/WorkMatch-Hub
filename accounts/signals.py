@@ -10,7 +10,6 @@ from .models import AuditLog
 logger = logging.getLogger('workmatch_hub')
 User = get_user_model()
 
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
     if created:
@@ -23,8 +22,11 @@ def log_user_login(sender, request, user, **kwargs):
 
 @receiver(user_logged_out)
 def log_user_logout(sender, request, user, **kwargs):
-    logger.info(f"User logged out: {user.username}")
-    AuditLog.objects.create(user=user, action="logged out")
+    if user and user.is_authenticated:
+        logger.info(f"User logged out: {user.username}")
+        AuditLog.objects.create(user=user, action="logged out")
+    else:
+        logger.info('An anonymous user has logged out.')
 
 @receiver(post_save, sender=User)
 def log_user_profile_update(sender, instance, created, **kwargs):
