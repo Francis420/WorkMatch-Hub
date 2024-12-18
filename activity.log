@@ -7743,3 +7743,35 @@ Traceback (most recent call last):
     )
 django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 49: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
 User admin2 accessed /accounts/profile/job_seeker/2/
+User admin2 accessed /accounts/profile/job_seeker/2/
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /accounts/profile/job_seeker/2/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User logged out: admin2
+WebSocket disconnected for user: admin2
+User updated profile: admin1
+User logged in: admin1
+User admin1 accessed /accounts/login/
+User admin1 accessed /accounts/profile/
+User admin1 accessed /accounts/profile/job_seeker/2/
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /accounts/profile/job_seeker/edit/
+User admin1 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin1
+WebSocket connected for user: admin1
+User admin1 accessed /
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
