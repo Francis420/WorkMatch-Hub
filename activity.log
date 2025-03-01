@@ -7775,3 +7775,129 @@ User admin1 accessed /
 WebSocket disconnected for user: admin1
 User admin1 accessed /static/css/minty.min.css
 WebSocket connected for user: admin1
+User admin1 accessed /admin
+User admin1 accessed /admin/
+User admin1 accessed /admin/login/
+User admin1 accessed /static/admin/css/base.css
+User admin1 accessed /static/admin/css/dark_mode.css
+User admin1 accessed /static/admin/css/nav_sidebar.css
+User admin1 accessed /static/admin/js/theme.js
+User admin1 accessed /static/admin/css/login.css
+User admin1 accessed /static/admin/css/responsive.css
+User admin1 accessed /static/admin/js/nav_sidebar.js
+User admin1 accessed /
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/job_search/
+User admin1 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin1
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/job/1/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+User admin1 accessed /media/company_logos/amd.jpg
+WebSocket connected for user: admin1
+User admin1 accessed /
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /favicon.ico
+Not Found: /favicon.ico
+User admin1 accessed /jobs/job_search/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+Internal Server Error: /jobs/job/1/
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\asgiref\sync.py", line 518, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\asgiref\sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\asgiref\sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\user\Desktop\sad test\jobs\views.py", line 107, in job_detail
+    return render(request, 'jobs/job_detail.html', context)
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\sad test\root\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'cancel_application' not found. 'cancel_application' is not a valid view function or pattern name.
+User admin1 accessed /jobs/job/1/
+WebSocket disconnected for user: admin1
+User admin1 accessed /jobs/job/1/
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/job_search/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/job/29/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/jobs/29/apply/
+User admin1 accessed /jobs/job/29/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1
+User admin1 accessed /jobs/job_search/
+WebSocket disconnected for user: admin1
+User admin1 accessed /static/css/minty.min.css
+WebSocket connected for user: admin1

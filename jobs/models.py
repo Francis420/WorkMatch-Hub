@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 class JobPost(models.Model):
@@ -41,11 +42,9 @@ class JobAlert(models.Model):
         return f"{self.user.username}'s Job Alert"
 
 class Application(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    job_post = models.ForeignKey('JobPost', on_delete=models.CASCADE)
-    cover_letter = models.TextField()
-    resume = models.FileField(upload_to='resumes/')
-    applied_at = models.DateTimeField(auto_now_add=True)
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username} - {self.job_post.title}"

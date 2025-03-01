@@ -13,6 +13,8 @@ from .models import Application
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from django.utils import timezone
+from datetime import timedelta
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -86,7 +88,23 @@ def job_search(request):
 
 def job_detail(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
-    return render(request, 'jobs/job_detail.html', {'job': job})
+    user = request.user
+    can_apply = True
+    reapply_time = None
+
+    if user.is_authenticated and user.is_job_seeker:
+        recent_application = Application.objects.filter(job_post=job, user=user, timestamp__gte=timezone.now() - timedelta(days=1)).first()
+        if recent_application:
+            can_apply = False
+            reapply_time = recent_application.timestamp + timedelta(days=1)
+
+    context = {
+        'job': job,
+        'can_apply': can_apply,
+        'reapply_time': reapply_time,
+        'user_has_applied': Application.objects.filter(job_post=job, user=user).exists()
+    }
+    return render(request, 'jobs/job_detail.html', context)
 
 @login_required
 def job_alerts(request):
@@ -179,13 +197,19 @@ def send_job_alerts():
                 else:
                     logger.info(f"Notification already exists for user: {alert.user.username}, Job: {job.title}")
 
+@login_required
 def apply_for_job(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
     user = request.user
 
     if user.is_job_seeker:
+        # Check if the user has applied within the last 24 hours
+        recent_application = Application.objects.filter(job_post=job, user=user, timestamp__gte=timezone.now() - timedelta(days=1)).exists()
+        if recent_application:
+            return render(request, 'accounts/error.html', {'message': 'You cannot reapply for this job within 24 hours of your last application or cancellation.'})
+
         # Save the application in the database
-        Application.objects.create(job_post=job, user=user)
+        Application.objects.create(job_post=job, user=user, timestamp=timezone.now())
 
         # Send email notification to the employer
         message = f"{user.username} has applied for your job posting: {job.title}"
@@ -204,3 +228,20 @@ def apply_for_job(request, job_id):
         return redirect('job_detail', job_id=job.id)
     else:
         return render(request, 'accounts/error.html', {'message': 'You are not authorized to apply for this job.'})
+    
+@login_required
+def cancel_application(request, job_id):
+    job = get_object_or_404(JobPost, id=job_id)
+    user = request.user
+
+    if user.is_job_seeker:
+        application = get_object_or_404(Application, job_post=job, user=user)
+        application.delete()
+        message = f"{user.username} has cancelled their application for your job posting: {job.title}"
+        send_mail('Job Application Cancelled', message, settings.EMAIL_HOST_USER, [job.employer.email], fail_silently=False)
+        notify(sender=user, recipient=job.employer, verb=message, target=job)
+        return redirect('job_detail', job_id=job.id)
+    else:
+        return render(request, 'accounts/error.html', {'message': 'You are not authorized to cancel this application.'})
+    
+
