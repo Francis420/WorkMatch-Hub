@@ -15,6 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from django.utils import timezone
 from datetime import timedelta
+from notifications.models import Notification
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -28,7 +29,7 @@ def post_job(request):
             job_post.employer = request.user
             job_post.save()
             send_job_alerts()  # Call the function to send job alerts
-            return redirect('job_list')
+            return redirect('posted_job')
     else:
         form = JobPostForm()
     return render(request, 'jobs/post_job.html', {'form': form})
@@ -185,15 +186,16 @@ def send_job_alerts():
             # Create real-time notifications
             for job, match_details_str in matching_jobs.items():
                 if job.id not in alert.notified_jobs:
-                    notification = notify(
-                        sender=job.employer,
-                        recipient=alert.user,
-                        verb=f"New job alert: {job.title} in {job.location} (matched on: {match_details_str})",
-                        target=job
-                    )
-                    logger.info(f"Notification created: {notification}, Recipient: {alert.user.username}, Job: {job.title}")
-                    alert.notified_jobs.append(job.id)
-                    alert.save()
+                    if not Notification.objects.filter(sender=job.employer, recipient=alert.user, verb=f"New job alert: {job.title} in {job.location} (matched on: {match_details_str})", target=job).exists():
+                        notification = notify(
+                            sender=job.employer,
+                            recipient=alert.user,
+                            verb=f"New job alert: {job.title} in {job.location} (matched on: {match_details_str})",
+                            target=job
+                        )
+                        logger.info(f"Notification created: {notification}, Recipient: {alert.user.username}, Job: {job.title}")
+                        alert.notified_jobs.append(job.id)
+                        alert.save()
                 else:
                     logger.info(f"Notification already exists for user: {alert.user.username}, Job: {job.title}")
 
@@ -222,8 +224,9 @@ def apply_for_job(request, job_id):
         )
 
         # Create a notification
-        notification = notify(sender=user, recipient=job.employer, verb=message, target=job)
-        print(f"Notification created: {notification}, Sender: {notification.sender}, Sender ID: {notification.sender.id}")
+        if not Notification.objects.filter(sender=user, recipient=job.employer, verb=message, target=job).exists():
+            notification = notify(sender=user, recipient=job.employer, verb=message, target=job)
+            print(f"Notification created: {notification}, Sender: {notification.sender}, Sender ID: {notification.sender.id}")
 
         return redirect('job_detail', job_id=job.id)
     else:
@@ -235,12 +238,16 @@ def cancel_application(request, job_id):
     user = request.user
 
     if user.is_job_seeker:
-        application = get_object_or_404(Application, job_post=job, user=user)
-        application.delete()
-        message = f"{user.username} has cancelled their application for your job posting: {job.title}"
-        send_mail('Job Application Cancelled', message, settings.EMAIL_HOST_USER, [job.employer.email], fail_silently=False)
-        notify(sender=user, recipient=job.employer, verb=message, target=job)
-        return redirect('job_detail', job_id=job.id)
+        applications = Application.objects.filter(job_post=job, user=user)
+        if applications.exists():
+            for application in applications:
+                application.delete()
+            message = f"{user.username} has cancelled their application(s) for your job posting: {job.title}"
+            send_mail('Job Application Cancelled', message, settings.EMAIL_HOST_USER, [job.employer.email], fail_silently=False)
+            notify(sender=user, recipient=job.employer, verb=message, target=job)
+            return redirect('job_detail', job_id=job.id)
+        else:
+            return render(request, 'accounts/error.html', {'message': 'No applications found to cancel.'})
     else:
         return render(request, 'accounts/error.html', {'message': 'You are not authorized to cancel this application.'})
     
