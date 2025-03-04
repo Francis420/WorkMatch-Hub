@@ -122,7 +122,7 @@ def job_seeker_register(request):
             user.is_job_seeker = True
             user.save()
             login(request, user)
-            return redirect('job_seeker_profile')
+            return redirect('job_seeker_profile', pk=user.pk)
     else:
         form = JobSeekerSignUpForm()
     return render(request, 'accounts/job_seeker_register.html', {'form': form})
@@ -135,7 +135,7 @@ def employer_register(request):
             user.is_employer = True
             user.save()
             login(request, user)
-            return redirect('employer_profile')
+            return redirect('employer_profile', pk=user.pk)
     else:
         form = EmployerSignUpForm()
     return render(request, 'accounts/employer_register.html', {'form': form})
@@ -203,8 +203,11 @@ def job_seeker_profile(request, pk=None):
         return render(request, 'accounts/error.html', {'message': 'You are not authorized to view this page.'})
 
 @login_required
-def employer_profile(request):
-    user = request.user
+def employer_profile(request, pk=None):
+    if pk:
+        user = get_object_or_404(CustomUser, pk=pk)
+    else:
+        user = request.user
     if user.is_employer:
         profile = Profile.objects.get(user=user)
         return render(request, 'accounts/employer_profile.html', {'profile': profile})

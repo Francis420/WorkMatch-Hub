@@ -24,7 +24,6 @@ class JobPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     job_duration = models.CharField(max_length=255, blank=True, null=True)
     job_type = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES, default='contract')
-    budget = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return self.title

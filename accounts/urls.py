@@ -18,7 +18,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('profile/job_seeker/<int:pk>/', views.job_seeker_profile, name='job_seeker_profile'),  
-    path('profile/employer/', views.employer_profile, name='employer_profile'),  
+    path('profile/employer/<int:pk>/', views.employer_profile, name='employer_profile'),  
     path('profile/', views.login_redirect, name='login_redirect'),
     path('profile/job_seeker/edit/', views.edit_job_seeker_profile, name='edit_job_seeker_profile'),
     path('profile/employer/edit/', views.edit_employer_profile, name='edit_employer_profile'),

@@ -61,6 +61,11 @@
                             {% if user.is_authenticated %}
                                 {% if user.is_job_seeker %}
                                     <li class="nav-item"><a href="{% url 'job_search' %}" class="nav-link">Search Jobs</a></li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'notifications' %}">
+                                            Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item"><a href="{% url 'job_seeker_profile' pk=user.id %}" class="nav-link">Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'edit_job_seeker_profile' %}" class="nav-link">Update Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
@@ -68,15 +73,16 @@
                                     <li class="nav-item"><a href="{% url 'candidate_search' %}" class="nav-link">Browse Applicants</a></li>
                                     <li class="nav-item"><a href="{% url 'post_job' %}" class="nav-link">Post Job</a></li>
                                     <li class="nav-item"><a href="{% url 'posted_job' %}" class="nav-link">Your Job Posts</a></li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'notifications' %}">
+                                            Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'employer_profile' pk=user.id %}" class="nav-link">Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'edit_employer_profile' %}" class="nav-link">Update Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
                                 {% endif %}
                                 <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>
-                                <li class="nav-item">
-                                    <a href="{% url 'notifications' %}">
-                                        Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
-                                    </a>
-                                </li>
                                 {% if user.is_staff %}
                                     <li class="nav-item"><a href="{% url 'create_admin' %}" class="nav-link">Create Admin</a></li>
                                     <li class="nav-item"><a href="{% url 'view_audit_logs' %}" class="nav-link">View Reports</a></li>

@@ -16,6 +16,7 @@ import numpy as np
 from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
+from django.db.models import Q
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -55,8 +56,15 @@ def delete_job(request, job_id):
     return render(request, 'jobs/delete_job.html', {'job': job})
 
 def posted_job(request):
-    job_posts = JobPost.objects.all()
-    return render(request, 'jobs/posted_job.html', {'job_posts': job_posts})
+    user = request.user
+    query = request.GET.get('q', '') 
+    if query:
+        job_posts = JobPost.objects.filter(
+            Q(employer=user) & (Q(title__icontains=query) | Q(description__icontains=query))
+        ).order_by('-created_at')
+    else:
+        job_posts = JobPost.objects.filter(employer=user).order_by('-created_at')
+    return render(request, 'jobs/posted_job.html', {'job_posts': job_posts, 'query': query})
 
 def job_search(request):
     form = JobSearchForm(request.GET or None)

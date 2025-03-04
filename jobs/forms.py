@@ -7,7 +7,7 @@ from .models import JobPost, JobAlert
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        fields = ['title', 'description', 'requirements', 'location', 'salary', 'job_duration', 'job_type', 'budget']
+        fields = ['title', 'description', 'requirements', 'location', 'salary', 'job_duration', 'job_type']
         labels = {
             'title': 'Job Title',
             'description': 'Job Description',
@@ -15,8 +15,7 @@ class JobPostForm(forms.ModelForm):
             'location': 'Job Location',
             'salary': 'Salary/Budget',
             'job_duration': 'Job Duration',
-            'job_type': 'Job Type',
-            'budget': 'Budget (if applicable)',
+            'job_type': 'Job Type'
         }
         widgets = {
             'job_type': forms.Select(choices=JobPost.JOB_TYPE_CHOICES),
