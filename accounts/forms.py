@@ -42,7 +42,7 @@ class JobSeekerProfileForm(forms.ModelForm):
         model = Profile
         fields = [
             'full_name', 'profile_picture', 'skills', 'experience', 'education',
-            'resume', 'location', 'job_preferences', 'availability', 'contact_number', 'facebook_link'
+            'resume', 'location', 'availability', 'contact_number', 'facebook_link'
         ]
 
 class EmployerProfileForm(forms.ModelForm):

@@ -54,6 +54,7 @@ def delete_user(request, user_id):
     user.delete()
     log_user_activity(request.user, f"deleted user {user.username}")
     return redirect('user_list')
+
 @staff_member_required
 def create_admin(request):
     if request.method == 'POST':
@@ -220,7 +221,7 @@ def login_redirect(request):
         if user.is_job_seeker:
             return redirect('job_seeker_profile', pk=user.id)
         elif user.is_employer:
-            return redirect('employer_profile')
+            return redirect('employer_profile', pk=user.id)
     return redirect('home')
 
 @login_required
@@ -232,7 +233,7 @@ def edit_job_seeker_profile(request):
             form = JobSeekerProfileForm(request.POST, request.FILES, instance=profile)
             if form.is_valid():
                 form.save()
-                return redirect('job_seeker_profile')
+                return redirect('job_seeker_profile', pk=user.pk)
         else:
             form = JobSeekerProfileForm(instance=profile)
         return render(request, 'accounts/edit_job_seeker_profile.html', {'form': form})
@@ -248,7 +249,7 @@ def edit_employer_profile(request):
             form = EmployerProfileForm(request.POST, request.FILES, instance=profile)
             if form.is_valid():
                 form.save()
-                return redirect('employer_profile')
+                return redirect('employer_profile', pk=user.pk)
         else:
             form = EmployerProfileForm(instance=profile)
         return render(request, 'accounts/edit_employer_profile.html', {'form': form})

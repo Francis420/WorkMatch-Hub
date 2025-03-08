@@ -238,7 +238,7 @@ def apply_for_job(request, job_id):
 
         return redirect('job_detail', job_id=job.id)
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to apply for this job.'})
+        return render(request, 'accounts/error.html', {'message': 'Please Try Again Later.'})
     
 @login_required
 def cancel_application(request, job_id):

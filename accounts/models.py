@@ -1,12 +1,17 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 class CustomUser(AbstractUser):
     is_job_seeker = models.BooleanField(default=False)
     is_employer = models.BooleanField(default=False)
     company_name = models.CharField(max_length=255, blank=True, null=True)
 
+def validate_pdf(value):
+    if not value.name.endswith('.pdf'):
+        raise ValidationError("Only PDF files are allowed.")
+    
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     immediate_notifications = models.BooleanField(default=False)
@@ -19,9 +24,8 @@ class Profile(models.Model):
     skills = models.TextField(blank=True, null=True)
     experience = models.TextField(blank=True, null=True)
     education = models.TextField(blank=True, null=True)
-    resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+    resume = models.FileField(upload_to='resumes/', blank=True, null=True, validators=[validate_pdf])
     location = models.CharField(max_length=255, blank=True, null=True)
-    job_preferences = models.TextField(blank=True, null=True)
     availability = models.CharField(max_length=255, blank=True, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)
     facebook_link = models.URLField(blank=True, null=True) 
