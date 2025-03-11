@@ -17,6 +17,7 @@ from django.utils import timezone
 from datetime import timedelta
 from notifications.models import Notification
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -93,7 +94,11 @@ def job_search(request):
             logger.info(f"User {user.username} searched for: {search_query}")
             AuditLog.objects.create(user=user, action=f"searched for: {search_query}")
 
-    return render(request, 'jobs/job_search.html', {'form': form, 'jobs': jobs})
+    paginator = Paginator(jobs, 6)  # Show 6 job posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'jobs/job_search.html', {'form': form, 'page_obj': page_obj})
 
 def job_detail(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)

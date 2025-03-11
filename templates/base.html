@@ -8,6 +8,30 @@
     <title>{% block title %}WorkMatch Hub | {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/minty.min.css' %}">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
         img {
             -webkit-user-drag: none;
             -khtml-user-drag: none;
@@ -22,13 +46,23 @@
         img {
             pointer-events: none;
         }
-        .nav-item a {
+        .nav-item a, .nav-item .nav-button {
             display: inline-block;
-            color: white; /* Ensure the text color is visible */
+            color: white; 
+            padding: 10px 20px; 
+            margin: 5px; 
+            font-family: 'Arial', sans-serif; 
+            border-radius: 8px; 
+            transition: background-color 0.3s, color 0.3s; 
+            white-space: nowrap; 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
         }
         
-        .nav-item a:hover {
-            color: lightgray; /* Optional: Change color on hover */
+        .nav-item a:hover, .nav-item .nav-button:hover {
+            color: white; 
+            background-color: #0056b3; 
         }
         
         .badge {
@@ -40,6 +74,19 @@
             position: relative;
             top: -10px;
             right: -10px;
+        }
+        
+        .card {
+            background-color: #f8f9fa; 
+        }
+        
+        .card-footer {
+            background-color: transparent;
+            border-top: none;
+        }
+
+        .card-body {
+            padding: 20px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
@@ -91,7 +138,7 @@
                                 <li class="nav-item">
                                     <form method="post" action="{% url 'logout' %}" class="d-inline" id="logout-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-link nav-link" id="logout-button">Logout</button>
+                                        <button type="submit" class="nav-button" id="logout-button">Logout</button>
                                     </form>
                                 </li>
                             {% else %}
