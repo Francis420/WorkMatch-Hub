@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -8,14 +7,30 @@ from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
-from .forms import JobSeekerSignUpForm, EmployerSignUpForm, NotificationPreferencesForm, JobSeekerProfileForm, EmployerProfileForm, AdminCreationForm
-from .models import CustomUser, Profile, AuditLog
 from jobs.models import JobPost
 import logging
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from fuzzywuzzy import fuzz
 from notifications.utils import notify
+from .forms import (
+    JobSeekerSignUpForm, 
+    EmployerSignUpForm, 
+    NotificationPreferencesForm, 
+    JobSeekerProfileForm, 
+    EmployerProfileForm, 
+    AdminCreationForm
+)
+from django.shortcuts import (
+    render, 
+    redirect, 
+    get_object_or_404
+)
+from .models import (
+    CustomUser, 
+    Profile, 
+    AuditLog
+)
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')

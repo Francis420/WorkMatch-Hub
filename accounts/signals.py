@@ -2,10 +2,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import Profile
-from django.contrib.auth.signals import user_logged_in, user_logged_out
 import logging
 from django.contrib.auth import get_user_model
 from .models import AuditLog
+from django.contrib.auth.signals import (
+    user_logged_in, 
+    user_logged_out
+)
 
 logger = logging.getLogger('workmatch_hub')
 User = get_user_model()

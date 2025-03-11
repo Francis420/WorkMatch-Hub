@@ -7,7 +7,14 @@ from .models import JobPost, JobAlert
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        fields = ['title', 'description', 'requirements', 'location', 'salary', 'job_duration', 'job_type']
+        fields = ['title', 
+                  'description', 
+                  'requirements', 
+                  'location', 
+                  'salary', 
+                  'job_duration', 
+                  'job_type'
+        ]
         labels = {
             'title': 'Job Title',
             'description': 'Job Description',
@@ -42,4 +49,7 @@ class JobAlertForm(forms.ModelForm):
 
     class Meta:
         model = JobAlert
-        fields = ['job_title', 'job_description', 'location']
+        fields = ['job_title', 
+                  'job_description', 
+                  'location'
+        ]

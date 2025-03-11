@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from accounts.models import AuditLog  # Import AuditLog from accounts app
+from accounts.models import AuditLog  
 import logging
 from fuzzywuzzy import fuzz
 from notifications.utils import notify

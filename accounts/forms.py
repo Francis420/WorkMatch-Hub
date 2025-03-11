@@ -13,7 +13,11 @@ class JobSeekerSignUpForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 
+                  'email', 
+                  'password1', 
+                  'password2'
+                  )
 
 class EmployerSignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -24,7 +28,11 @@ class EmployerSignUpForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 
+                  'email', 
+                  'password1', 
+                  'password2'
+                  )
 
 class NotificationPreferencesForm(forms.Form):
     immediate = forms.BooleanField(required=False)
@@ -41,19 +49,37 @@ class JobSeekerProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'full_name', 'profile_picture', 'skills', 'experience', 'education',
-            'resume', 'location', 'availability', 'contact_number', 'facebook_link'
+            'full_name', 
+            'profile_picture', 
+            'skills', 
+            'experience', 
+            'education',
+            'resume', 
+            'location', 
+            'availability', 
+            'contact_number', 
+            'facebook_link'
         ]
 
 class EmployerProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'employer_name', 'company_logo', 'company_description', 'industry',
-            'website', 'contact_person', 'contact_number', 'facebook_link'
+            'employer_name', 
+            'company_logo', 
+            'company_description', 
+            'industry',
+            'website', 
+            'contact_person', 
+            'contact_number', 
+            'facebook_link'
         ]
 
 class AdminCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'is_staff', 'is_superuser')
+        fields = ('username', 
+                  'email', 
+                  'is_staff', 
+                  'is_superuser'
+                  )

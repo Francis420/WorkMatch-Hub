@@ -5,7 +5,12 @@ from feedback.models import Feedback
 from jobs.models import JobPost, JobAlert
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'is_active', 'is_staff', 'is_job_seeker', 'is_employer')
+    list_display = ('username', 
+                    'email', 
+                    'is_active', 
+                    'is_staff', 
+                    'is_job_seeker', 
+                    'is_employer')
     actions = ['activate_users', 'deactivate_users']
 
     def activate_users(self, request, queryset):
