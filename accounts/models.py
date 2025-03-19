@@ -3,12 +3,12 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser): #multilevel user model
     is_job_seeker = models.BooleanField(default=False)
     is_employer = models.BooleanField(default=False)
     company_name = models.CharField(max_length=255, blank=True, null=True)
 
-def validate_pdf(value):
+def validate_pdf(value): #allow only pdf files
     if not value.name.endswith('.pdf'):
         raise ValidationError("Only PDF files are allowed.")
     
@@ -18,7 +18,7 @@ class Profile(models.Model):
     daily_notifications = models.BooleanField(default=False)
     weekly_notifications = models.BooleanField(default=False)
     
-    # Job Seeker specific fields
+    # Job Seeker fields
     full_name = models.CharField(max_length=255, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     skills = models.TextField(blank=True, null=True)
@@ -30,7 +30,7 @@ class Profile(models.Model):
     contact_number = models.CharField(max_length=20, blank=True, null=True)
     facebook_link = models.URLField(blank=True, null=True) 
 
-    # Employer specific fields
+    # Employer fields
     employer_name = models.CharField(max_length=255, blank=True, null=True)
     company_logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)
     company_description = models.TextField(blank=True, null=True)
@@ -44,7 +44,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-class AuditLog(models.Model):
+class AuditLog(models.Model): #logging
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)

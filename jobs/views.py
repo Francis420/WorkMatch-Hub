@@ -56,16 +56,26 @@ def delete_job(request, job_id):
         return redirect('posted_job')
     return render(request, 'jobs/delete_job.html', {'job': job})
 
+@login_required
 def posted_job(request):
     user = request.user
-    query = request.GET.get('q', '') 
+    query = request.GET.get('q', '')
+    
+    job_posts = JobPost.objects.filter(employer=user)
+
     if query:
-        job_posts = JobPost.objects.filter(
-            Q(employer=user) & (Q(title__icontains=query) | Q(description__icontains=query))
-        ).order_by('-created_at')
-    else:
-        job_posts = JobPost.objects.filter(employer=user).order_by('-created_at')
-    return render(request, 'jobs/posted_job.html', {'job_posts': job_posts, 'query': query})
+        job_posts = job_posts.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+
+    paginator = Paginator(job_posts, 10)  # Show 10 job posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'jobs/posted_job.html', {
+        'page_obj': page_obj,
+        'query': query,
+    })
 
 def job_search(request):
     form = JobSearchForm(request.GET or None)

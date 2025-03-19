@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import CustomPasswordChangeView
-from .views import create_admin, suspend_user, activate_user, delete_user, view_audit_logs, user_list
+from .views import create_admin, suspend_user, activate_user, view_audit_logs, user_list
 
 
 
@@ -13,7 +13,6 @@ urlpatterns = [
     path('register/employer/', views.employer_register, name='employer_register'),
     path('admin/suspend_user/<int:user_id>/', views.suspend_user, name='suspend_user'),
     path('admin/activate_user/<int:user_id>/', views.activate_user, name='activate_user'),
-    path('admin/delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('set_notification_preferences/', views.set_notification_preferences, name='set_notification_preferences'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -24,9 +23,6 @@ urlpatterns = [
     path('profile/employer/edit/', views.edit_employer_profile, name='edit_employer_profile'),
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
     path('create_admin/', create_admin, name='create_admin'),
-    path('suspend_user/<int:user_id>/', suspend_user, name='suspend_user'),
-    path('activate_user/<int:user_id>/', activate_user, name='activate_user'),
-    path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
     path('view_audit_logs/', view_audit_logs, name='view_audit_logs'),
      path('user_list/', user_list, name='user_list'),
 ]

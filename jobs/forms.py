@@ -29,10 +29,22 @@ class JobPostForm(forms.ModelForm):
         }
 
 class JobSearchForm(forms.Form):
-    title = forms.CharField(max_length=255, required=False)
-    location = forms.CharField(max_length=255, required=False)
-    min_salary = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
-    max_salary = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
+    title = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Job Title'})
+    )
+    location = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Location'})
+    )
+    min_salary = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={'placeholder': 'Min Salary'})
+    )
+    max_salary = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={'placeholder': 'Max Salary'})
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

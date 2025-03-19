@@ -2,43 +2,77 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block title %}Audit Log{% endblock %}
+
 {% block content %}
-  <h2>Audit Log</h2>
-  <form method="get" class="mb-3">
-    <div class="row">
-      <div class="col-md-2">
-        <input type="text" name="user" class="form-control" placeholder="User..." value="{{ user_filter }}">
-      </div>
-      <div class="col-md-2">
-        <input type="text" name="action" class="form-control" placeholder="Action..." value="{{ action_filter }}">
-      </div>
-      <div class="col-md-2">
-        <input type="datetime-local" name="start_date" class="form-control" value="{{ start_date|date:'Y-m-d\TH:i' }}">
-      </div>
-      <div class="col-md-2">
-        <input type="datetime-local" name="end_date" class="form-control" value="{{ end_date|date:'Y-m-d\TH:i' }}">
-      </div>
-      <div class="col-md-2">
-        <button type="submit" class="btn btn-primary">Filter</button>
-      </div>
+<div class="container">
+    <h2 class="mt-4">Audit Log</h2>
+    <form method="get" class="mt-3">
+        <div class="input-group mb-3">
+            <input type="text" name="user" class="form-control" placeholder="User" value="{{ user_filter }}">
+            <input type="text" name="action" class="form-control" placeholder="Action" value="{{ action_filter }}">
+            <input type="datetime-local" name="start_date" class="form-control" value="{{ start_date|date:'Y-m-d\TH:i' }}">
+            <input type="datetime-local" name="end_date" class="form-control"  value="{{ end_date|date:'Y-m-d\TH:i' }}">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+
+    <h3 class="mt-4">Logs</h3>
+    <div class="row mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in page_obj %}
+                    <tr>
+                        <td>{{ log.user.username }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.timestamp }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </form>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>User</th>
-        <th>Action</th>
-        <th>Timestamp</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for log in logs %}
-        <tr>
-          <td>{{ log.user.username }}</td>
-          <td>{{ log.action }}</td>
-          <td>{{ log.timestamp }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <br>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if start_date %}&start_date={{ start_date|date:'Y-m-d\TH:i' }}{% endif %}{% if end_date %}&end_date={{ end_date|date:'Y-m-d\TH:i' }}{% endif %}" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if start_date %}&start_date={{ start_date|date:'Y-m-d\TH:i' }}{% endif %}{% if end_date %}&end_date={{ end_date|date:'Y-m-d\TH:i' }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if start_date %}&start_date={{ start_date|date:'Y-m-d\TH:i' }}{% endif %}{% if end_date %}&end_date={{ end_date|date:'Y-m-d\TH:i' }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if start_date %}&start_date={{ start_date|date:'Y-m-d\TH:i' }}{% endif %}{% if end_date %}&end_date={{ end_date|date:'Y-m-d\TH:i' }}{% endif %}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 {% endblock %}

@@ -114,7 +114,6 @@
                                         </a>
                                     </li>
                                     <li class="nav-item"><a href="{% url 'job_seeker_profile' pk=user.id %}" class="nav-link">Profile</a></li>
-                                    <li class="nav-item"><a href="{% url 'edit_job_seeker_profile' %}" class="nav-link">Update Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
                                 {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'candidate_search' %}" class="nav-link">Browse Applicants</a></li>
@@ -126,7 +125,6 @@
                                         </a>
                                     </li>
                                     <li class="nav-item"><a href="{% url 'employer_profile' pk=user.id %}" class="nav-link">Profile</a></li>
-                                    <li class="nav-item"><a href="{% url 'edit_employer_profile' %}" class="nav-link">Update Profile</a></li>
                                     <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
                                 {% endif %}
                                 <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>

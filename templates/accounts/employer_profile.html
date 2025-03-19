@@ -17,8 +17,7 @@
             <p class="card-text">Contact Person: {{ profile.contact_person }}</p>
             <p class="card-text">Contact Number: {{ profile.contact_number }}</p>
             <p class="card-text">Facebook: <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a></p>
-            <!-- Add more fields as needed -->
-            <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+            <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
         </div>
     </div>
 </div>

@@ -13,6 +13,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from fuzzywuzzy import fuzz
 from notifications.utils import notify
+from django.core.paginator import Paginator
 from .forms import (
     JobSeekerSignUpForm, 
     EmployerSignUpForm, 
@@ -44,8 +45,29 @@ def log_user_activity(user, action):
 
 @staff_member_required
 def user_list(request):
+    search_query = request.GET.get('search', '')
+    status_filter = request.GET.get('status', '')
+
     users = User.objects.all()
-    return render(request, 'accounts/user_list.html', {'users': users})
+
+    if search_query:
+        users = users.filter(username__icontains=search_query)
+
+    if status_filter:
+        if status_filter == 'active':
+            users = users.filter(is_active=True)
+        elif status_filter == 'inactive':
+            users = users.filter(is_active=False)
+
+    paginator = Paginator(users, 10)  # Show 10 users per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'accounts/user_list.html', {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'status_filter': status_filter,
+    })
 
 @staff_member_required
 def suspend_user(request, user_id):
@@ -61,13 +83,6 @@ def activate_user(request, user_id):
     user.is_active = True
     user.save()
     log_user_activity(request.user, f"activated user {user.username}")
-    return redirect('user_list')
-
-@staff_member_required
-def delete_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    user.delete()
-    log_user_activity(request.user, f"deleted user {user.username}")
     return redirect('user_list')
 
 @staff_member_required
@@ -112,8 +127,12 @@ def view_audit_logs(request):
 
     logs = logs.order_by('-timestamp')
 
+    paginator = Paginator(logs, 10)  # number of results per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'accounts/view_audit_logs.html', {
-        'logs': logs,
+        'page_obj': page_obj,
         'user_filter': user_filter,
         'action_filter': action_filter,
         'start_date': start_date,

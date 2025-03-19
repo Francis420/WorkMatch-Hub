@@ -22,8 +22,11 @@ def candidate_search(request):
         if form.cleaned_data['location']:
             candidates = candidates.filter(profile__location__icontains=form.cleaned_data['location'])
 
-    paginator = Paginator(candidates, 3) 
+    paginator = Paginator(candidates, 3)  # Show 3 candidates per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'candidates/candidate_search.html', {'form': form, 'page_obj': page_obj})
+    return render(request, 'candidates/candidate_search.html', {
+        'form': form,
+        'page_obj': page_obj,
+    })

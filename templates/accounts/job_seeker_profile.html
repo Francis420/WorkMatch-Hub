@@ -39,7 +39,7 @@
             {% endif %}
             {% if user.is_authenticated %}
                 {% if user.is_job_seeker %}
-                    <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+                    <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
                 {% else %}
                     <a href="{% url 'notifications' %}" class="btn btn-primary mt-3">Back to Notifications</a> 
                 {% endif %}
