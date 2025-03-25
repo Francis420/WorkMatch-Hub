@@ -104,7 +104,7 @@ def job_search(request):
             logger.info(f"User {user.username} searched for: {search_query}")
             AuditLog.objects.create(user=user, action=f"searched for: {search_query}")
 
-    paginator = Paginator(jobs, 6)  # Show 6 job posts per page
+    paginator = Paginator(jobs, 3)  # Number of results per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
