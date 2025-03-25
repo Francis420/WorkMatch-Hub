@@ -103,42 +103,49 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                        </ul>
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             {% if user.is_authenticated %}
                                 {% if user.is_job_seeker %}
                                     <li class="nav-item"><a href="{% url 'job_search' %}" class="nav-link">Search Jobs</a></li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'notifications' %}">
-                                            Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item"><a href="{% url 'job_seeker_profile' pk=user.id %}" class="nav-link">Profile</a></li>
-                                    <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
                                 {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'candidate_search' %}" class="nav-link">Browse Applicants</a></li>
                                     <li class="nav-item"><a href="{% url 'post_job' %}" class="nav-link">Post Job</a></li>
                                     <li class="nav-item"><a href="{% url 'posted_job' %}" class="nav-link">Your Job Posts</a></li>
+                                {% endif %}
+                                {% if user.is_staff %}
+                                    <li class="nav-item"><a href="{% url 'user_list' %}" class="nav-link">User Management</a></li>
+                                    <li class="nav-item"><a href="{% url 'view_audit_logs' %}" class="nav-link">View Audit Log</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            {% if user.is_authenticated %}
+                                {% if user.is_job_seeker %}
+                                    <li class="nav-item"><a href="{% url 'job_seeker_profile' pk=user.id %}" class="nav-link">Profile</a></li>
                                     <li class="nav-item">
                                         <a href="{% url 'notifications' %}">
                                             Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
+                                {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'employer_profile' pk=user.id %}" class="nav-link">Profile</a></li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'notifications' %}">
+                                            Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item"><a href="{% url 'set_notification_preferences' %}" class="nav-link">Notification Preferences</a></li>
                                 {% endif %}
-                                <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>
                                 {% if user.is_staff %}
-                                    <li class="nav-item"><a href="{% url 'create_admin' %}" class="nav-link">Create Admin</a></li>
-                                    <li class="nav-item"><a href="{% url 'view_audit_logs' %}" class="nav-link">View Reports</a></li>
-                                    <li class="nav-item"><a href="{% url 'user_list' %}" class="nav-link">User Management</a></li>
+                                    <li class="nav-item"><a href="{% url 'create_admin' %}" class="nav-link">Create an Admin</a></li>
                                 {% endif %}
-                                <li class="nav-item">
-                                    <form method="post" action="{% url 'logout' %}" class="d-inline" id="logout-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="nav-button" id="logout-button">Logout</button>
-                                    </form>
-                                </li>
+                                    <li class="nav-item"><a href="{% url 'password_change' %}" class="nav-link">Change Password</a></li>
+                                        <li class="nav-item">
+                                            <form method="post" action="{% url 'logout' %}" class="d-inline" id="logout-form">
+                                            {% csrf_token %}
+                                            <button type="submit" class="nav-button" id="logout-button">Logout</button>
+                                        </form>
+                                    </li>
                             {% else %}
                                 <li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Register</a></li>
                                 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>

@@ -59,7 +59,7 @@ def user_list(request):
         elif status_filter == 'inactive':
             users = users.filter(is_active=False)
 
-    paginator = Paginator(users, 10)  # Show 10 users per page
+    paginator = Paginator(users, 5)  # show number of results per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
