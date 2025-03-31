@@ -189,16 +189,7 @@ LOGGING = {
     },
 }
 
-
-# For password reset
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp-relay.brevo.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = '88e36e001@smtp-brevo.com'
-# EMAIL_HOST_PASSWORD = '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'
-# DEFAULT_FROM_EMAIL = '88e36e001@smtp-brevo.com'
-
+#need to use your own smtp server for email sending
 # For development only, prints emails to the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
 EMAIL_HOST = 'smtp.gmail.com'

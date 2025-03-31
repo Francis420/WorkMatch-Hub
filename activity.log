@@ -23222,3 +23222,138 @@ Traceback (most recent call last):
 UnboundLocalError: cannot access local variable 'notification' where it is not associated with a value
 User admin2 accessed /jobs/reject/38/
 WebSocket disconnected for user: admin2
+User admin2 accessed /
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /candidates/candidate_search/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+User admin2 accessed /static/images/default_profile.png
+Not Found: /static/images/default_profile.png
+WebSocket connected for user: admin2
+User admin2 accessed /static/images/default_profile.png
+Not Found: /static/images/default_profile.png
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/55/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/jobs/54/applicant/38/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/jobs/55/applicant/39/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/jobs/54/applicant/38/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/hire/38/
+User admin2 accessed /jobs/jobs/54/applicant/38/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /candidates/candidate_search/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/images/default_profile.png
+Not Found: /static/images/default_profile.png
+WebSocket connected for user: admin2
+User admin2 accessed /candidates/candidate_search/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+User admin2 accessed /static/images/default_profile.png
+Not Found: /static/images/default_profile.png
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/post_job/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /notifications/
+User admin2 accessed /static/css/minty.min.css
+WebSocket disconnected for user: admin2
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/jobs/54/applicant/38/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/reject/38/
+User admin2 accessed /jobs/jobs/54/applicant/38/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/job/54/update/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/post_job/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
+User admin2 accessed /jobs/posted_jobs/
+WebSocket disconnected for user: admin2
+User admin2 accessed /static/css/minty.min.css
+WebSocket connected for user: admin2
