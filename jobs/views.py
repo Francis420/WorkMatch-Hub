@@ -20,6 +20,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.utils.timezone import now
 from datetime import datetime, timedelta
+from django.utils.dateparse import parse_datetime
 
 
 User = get_user_model()
@@ -116,28 +117,41 @@ def job_search(request):
 
 def job_detail(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
-    latest_application = Application.objects.filter(job_post=job, user=request.user).order_by('-timestamp').first()
-
-    can_apply = True
+    user = request.user
+    hired = False
+    hired_date = None
     rejected = False
     reapply_time = None
+    pending = False
+    pending_since = None
 
-    if latest_application:
-        if latest_application.status in ["pending", "hired"]:
-            can_apply = False
-        elif latest_application.status == "rejected":
+    # Get the latest application for this job by the user
+    application = Application.objects.filter(job_post=job, user=user).order_by('-timestamp').first()
+
+    if application:
+        if application.status == "hired":
+            hired = True
+            hired_date = application.timestamp  # Application timestamp for hired date
+
+        elif application.status == "rejected":
             rejected = True
-            reapply_time = latest_application.timestamp + timedelta(days=180)
-            if reapply_time > datetime.now():
-                can_apply = False  # Cooldown still active
+            reapply_time = application.timestamp + timedelta(days=180)  # Cooldown of 180 days (6 months)
 
-    return render(request, "jobs/job_detail.html", {
+        elif application.status == "pending":
+            pending = True
+            pending_since = application.timestamp  # Track when the user applied
+
+    context = {
         "job": job,
-        "can_apply": can_apply,
-        "reapply_time": reapply_time,
+        "hired": hired,
+        "hired_date": hired_date,
         "rejected": rejected,
-        "user_has_applied": latest_application is not None
-    })
+        "reapply_time": reapply_time,
+        "pending": pending,
+        "pending_since": pending_since,
+    }
+    return render(request, "jobs/job_detail.html", context)
+
 
 @login_required
 def job_alerts(request):

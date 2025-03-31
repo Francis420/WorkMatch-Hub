@@ -45,75 +45,87 @@
             </div>
         </div>
     </div>
-    
-    <div class="mt-3">
-        <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
-    </div>
-    
-    {% if user.is_authenticated and user.is_job_seeker %}
-    <div class="mt-3">
-        {% if can_apply %}
-        <form id="application-form" action="{% url 'jobs:apply_for_job' job.id %}" method="post">
-            {% csrf_token %}
-            <button type="button" id="apply-button" class="btn btn-primary" onclick="handleApplication()">
-                {% if user_has_applied and not rejected %}
-                    Cancel Application
-                {% else %}
-                    Apply for this job
-                {% endif %}
-            </button>
-        </form>
-        {% elif rejected %}
-            <p class="text-warning">You previously applied and were rejected. Consider improving your resume for better chances.</p>
-            <button class="btn btn-primary">Apply Again</button>
-        {% else %}
-        <p id="countdown-timer" class="text-danger"></p>
-        <button class="btn btn-secondary" disabled>Apply (Cooldown Active)</button>
-        {% endif %}
-    </div>
+
+    {% if hired %}
+        <div class="alert alert-success text-center py-4">
+            <h5 class="fw-bold text-white">🎉 Congratulations! 🎉</h5>
+            <p class="text-light">You were hired for this job on <strong>{{ hired_date|date:"F j, Y, g:i A" }}</strong>.</p>
+        </div>
+        <button class="btn btn-success w-100" disabled>🎉 Hired - Congratulations!</button>
+
+    {% elif rejected and reapply_time %}
+        <div class="alert alert-danger text-center py-4">
+            <h5 class="fw-bold text-white">You were rejected.</h5>
+            <p class="text-light">You can reapply after:</p>
+            <p class="fw-bold text-light" id="countdown-timer"></p> <!-- Countdown Timer -->
+            <div class="progress mt-2">
+                <div id="countdown-progress" class="progress-bar bg-light" role="progressbar" style="width: 0%;"></div>
+            </div>
+        </div>
+        <button class="btn btn-secondary w-100" disabled>Apply (Cooldown Active)</button>
+
+    {% elif pending %}
+        <div class="alert alert-warning text-center py-4">
+            <h5 class="fw-bold text-dark">Application Received!</h5>
+            <p class="text-dark">Your application was submitted on <strong>{{ pending_since|date:"F j, Y, g:i A" }}</strong>.</p>
+            <p class="text-dark">Please wait for the employer to process your application.</p>
+        </div>
+        <button class="btn btn-warning w-100" disabled>Application Pending...</button>
+
+    {% else %}
+        <a href="{% url 'jobs:apply_for_job' job.id %}" class="btn btn-primary w-100">Apply for this job</a>
     {% endif %}
-</div>
 
-<script>
-function handleApplication() {
-    const applyButton = document.getElementById('apply-button');
-    const form = document.getElementById('application-form');
-    const isApplied = applyButton.textContent.trim() === 'Cancel Application';
-    
-    if (isApplied) {
-        if (confirm('Are you sure you want to cancel your application?')) {
-            form.action = "{% url 'jobs:cancel_application' job.id %}";
-            form.submit();
-        }
-    } else {
-        if (confirm('Are you sure you want to apply for this job?')) {
-            form.submit();
-        }
-    }
-}
+    {% if job.employer == user %}
+        <a href="{% url 'jobs:update_job' job.id %}" class="btn btn-warning w-100 mt-2">Update Job</a>
+        <a href="{% url 'jobs:delete_job' job.id %}" class="btn btn-danger w-100 mt-2">Delete Job</a>
+    {% endif %}
 
-{% if not can_apply %}
-document.addEventListener('DOMContentLoaded', function() {
-    const countdownElement = document.getElementById('countdown-timer');
-    const endTime = new Date("{{ reapply_time|date:'Y-m-d H:i:s' }}").getTime();
-    const interval = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = endTime - now;
-        
-        if (distance < 0) {
-            clearInterval(interval);
-            countdownElement.textContent = "You can now reapply for this job.";
-            location.reload();
-        } else {
+    <div class="mt-3 text-center">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">Go Back</a>
+    </div>
+
+    {% if rejected and reapply_time %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const countdownElement = document.getElementById('countdown-timer');
+        const progressBar = document.getElementById('countdown-progress');
+        const endTime = new Date("{{ reapply_time|date:'Y-m-d H:i:s' }}").getTime();
+        const startTime = new Date().getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endTime - now;
+
+            if (distance <= 0) {
+                countdownElement.innerHTML = "<span class='text-success fw-bold'>You can now reapply!</span>";
+                progressBar.style.width = "100%";
+                progressBar.classList.replace("bg-light", "bg-success");
+                progressBar.textContent = "Ready!";
+                clearInterval(interval);
+                return;
+            }
+
             const months = Math.floor(distance / (1000 * 60 * 60 * 24 * 30));
             const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            countdownElement.textContent = `You can reapply in ${months}m ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            countdownElement.innerHTML = `
+                <span class="fw-bold fs-4">${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds</span>
+            `;
+
+            const totalDuration = endTime - startTime;
+            const progress = ((totalDuration - distance) / totalDuration) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${Math.round(progress)}%`;
         }
-    }, 1000);
-});
-{% endif %}
-</script>
+
+        updateCountdown();
+        const interval = setInterval(updateCountdown, 1000);
+    });
+    </script>
+    {% endif %}
+</div>
 {% endblock %}
