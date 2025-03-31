@@ -27,6 +27,7 @@ class Profile(models.Model):
     resume = models.FileField(upload_to='resumes/', blank=True, null=True, validators=[validate_pdf])
     location = models.CharField(max_length=255, blank=True, null=True)
     availability = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(unique=True, max_length=255, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)
     facebook_link = models.URLField(blank=True, null=True) 
 
@@ -37,6 +38,7 @@ class Profile(models.Model):
     industry = models.CharField(max_length=255, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     contact_person = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(unique=True, max_length=255, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)
     facebook_link = models.URLField(blank=True, null=True)
     is_small_scale = models.BooleanField(default=False)

@@ -14,6 +14,7 @@ from django.utils import timezone
 from fuzzywuzzy import fuzz
 from notifications.utils import notify
 from django.core.paginator import Paginator
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from .forms import (
     JobSeekerSignUpForm, 
     EmployerSignUpForm, 
@@ -30,18 +31,36 @@ from django.shortcuts import (
 from .models import (
     CustomUser, 
     Profile, 
-    AuditLog
+    AuditLog,
 )
+from jobs.models import Application
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
 
+
+
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/change_password.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('password_change_success')
 
 def log_user_activity(user, action):
     AuditLog.objects.create(user=user, action=action)
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'accounts/password_reset.html'
+    email_template_name = 'accounts/password_reset_email.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'
 
 @staff_member_required
 def user_list(request):
@@ -233,9 +252,10 @@ def job_seeker_profile(request, pk=None):
 
     if user.is_job_seeker:
         profile = Profile.objects.get(user=user)
-        return render(request, 'accounts/job_seeker_profile.html', {'profile': profile})
+        applications = Application.objects.filter(user=user)
+        return render(request, 'accounts/job_seeker_profile.html', {'profile': profile, 'applications': applications})
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to view this page.'})
+        return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
 
 @login_required
 def employer_profile(request, pk=None):
@@ -247,7 +267,7 @@ def employer_profile(request, pk=None):
         profile = Profile.objects.get(user=user)
         return render(request, 'accounts/employer_profile.html', {'profile': profile})
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to view this page.'})
+        return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
 
 def login_redirect(request):
     user = request.user
@@ -272,7 +292,7 @@ def edit_job_seeker_profile(request):
             form = JobSeekerProfileForm(instance=profile)
         return render(request, 'accounts/edit_job_seeker_profile.html', {'form': form})
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to view this page.'})
+        return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
 
 @login_required
 def edit_employer_profile(request):
@@ -288,4 +308,4 @@ def edit_employer_profile(request):
             form = EmployerProfileForm(instance=profile)
         return render(request, 'accounts/edit_employer_profile.html', {'form': form})
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to view this page.'})
+        return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})

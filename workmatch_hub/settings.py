@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'fuzzywuzzy',
     'channels',
     'notifications',
+    'django_filters',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -188,8 +189,17 @@ LOGGING = {
     },
 }
 
-# For development only, prints emails to the console
+
 # For password reset
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp-relay.brevo.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = '88e36e001@smtp-brevo.com'
+# EMAIL_HOST_PASSWORD = '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'
+# DEFAULT_FROM_EMAIL = '88e36e001@smtp-brevo.com'
+
+# For development only, prints emails to the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

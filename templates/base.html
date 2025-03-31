@@ -105,11 +105,11 @@
                             <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
                             {% if user.is_authenticated %}
                                 {% if user.is_job_seeker %}
-                                    <li class="nav-item"><a href="{% url 'job_search' %}" class="nav-link">Search Jobs</a></li>
+                                    <li class="nav-item"><a href="{% url 'jobs:job_search' %}" class="nav-link">Search Jobs</a></li>
                                 {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'candidate_search' %}" class="nav-link">Browse Applicants</a></li>
-                                    <li class="nav-item"><a href="{% url 'post_job' %}" class="nav-link">Post Job</a></li>
-                                    <li class="nav-item"><a href="{% url 'posted_job' %}" class="nav-link">Your Job Posts</a></li>
+                                    <li class="nav-item"><a href="{% url 'jobs:post_job' %}" class="nav-link">Post Job</a></li>
+                                    <li class="nav-item"><a href="{% url 'jobs:posted_job' %}" class="nav-link">Your Job Posts</a></li>
                                 {% endif %}
                                 {% if user.is_staff %}
                                     <li class="nav-item"><a href="{% url 'user_list' %}" class="nav-link">User Management</a></li>
@@ -126,7 +126,7 @@
                                             Notifications <span id="notification-count" class="badge">{{ notification_count }}</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item"><a href="{% url 'job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
+                                    <li class="nav-item"><a href="{% url 'jobs:job_alerts' %}" class="nav-link">Set Job Alerts Preferences</a></li>
                                 {% elif user.is_employer %}
                                     <li class="nav-item"><a href="{% url 'employer_profile' pk=user.id %}" class="nav-link">Profile</a></li>
                                     <li class="nav-item">
@@ -162,6 +162,7 @@
     </main>
     <footer class="bg-primary text-white text-center p-3">
         <p class="mb-0">© 2024 WorkMatch Hub. All rights reserved.</p>
+        <p class="mb-0"><a href="{% url 'report_issue' %}" class="text-white">Report an Issue</a></p>
     </footer>
 
     {% if user.is_authenticated %}

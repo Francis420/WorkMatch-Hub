@@ -41,7 +41,17 @@
                 {% if user.is_job_seeker %}
                     <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
                 {% else %}
-                    <a href="{% url 'notifications' %}" class="btn btn-primary mt-3">Back to Notifications</a> 
+                    <a href="{% url 'notifications' %}" class="btn btn-primary mt-3">Back to Notifications</a>
+                    {% for application in applications %}
+                        {% if application.job_post.remaining_slots == 0 %}
+                            <p class="text-danger">All slots filled. <a href="{% url 'jobs:update_job' application.job_post.id %}">Update the job post to add more employees</a></p>
+                            <a href="{% url 'jobs:hire_job_seeker' application.id %}" class="btn btn-success mt-3 disabled">Hire</a>
+                            <a href="{% url 'jobs:reject_job_seeker' application.id %}" class="btn btn-danger mt-3 disabled">Reject</a>
+                        {% else %}
+                            <a href="{% url 'jobs:hire_job_seeker' application.id %}" class="btn btn-success mt-3 {% if application.status == 'hired' %}disabled{% endif %}">Hire</a>
+                            <a href="{% url 'jobs:reject_job_seeker' application.id %}" class="btn btn-danger mt-3 {% if application.status == 'rejected' %}disabled{% endif %}">Reject</a>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
             {% endif %}
         </div>

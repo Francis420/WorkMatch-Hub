@@ -13,7 +13,9 @@ class JobPostForm(forms.ModelForm):
                   'location', 
                   'salary', 
                   'job_duration', 
-                  'job_type'
+                  'job_type',
+                  'total_slots',
+                  'remaining_slots'
         ]
         labels = {
             'title': 'Job Title',
@@ -22,7 +24,9 @@ class JobPostForm(forms.ModelForm):
             'location': 'Job Location',
             'salary': 'Salary/Budget',
             'job_duration': 'Job Duration',
-            'job_type': 'Job Type'
+            'job_type': 'Job Type',
+            'total_slots': 'Total Slots',
+            'remaining_slots': 'Remaining Slots'
         }
         widgets = {
             'job_type': forms.Select(choices=JobPost.JOB_TYPE_CHOICES),

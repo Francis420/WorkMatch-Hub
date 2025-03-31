@@ -18,6 +18,9 @@ from datetime import timedelta
 from notifications.models import Notification
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.utils.timezone import now
+from datetime import datetime, timedelta
+
 
 User = get_user_model()
 logger = logging.getLogger('workmatch_hub')
@@ -31,7 +34,7 @@ def post_job(request):
             job_post.employer = request.user
             job_post.save()
             send_job_alerts()  # Call the function to send job alerts
-            return redirect('posted_job')
+            return redirect('jobs:posted_job')
     else:
         form = JobPostForm()
     return render(request, 'jobs/post_job.html', {'form': form})
@@ -43,7 +46,7 @@ def update_job(request, job_id):
         form = JobPostForm(request.POST, instance=job)
         if form.is_valid():
             form.save()
-            return redirect('posted_job')
+            return redirect('jobs:posted_job')
     else:
         form = JobPostForm(instance=job)
     return render(request, 'jobs/update_job.html', {'form': form})
@@ -53,15 +56,15 @@ def delete_job(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
     if request.method == 'POST':
         job.delete()
-        return redirect('posted_job')
+        return redirect('jobs:posted_job')
     return render(request, 'jobs/delete_job.html', {'job': job})
 
 @login_required
 def posted_job(request):
     user = request.user
     query = request.GET.get('q', '')
-    
-    job_posts = JobPost.objects.filter(employer=user)
+
+    job_posts = JobPost.objects.filter(employer=user).order_by('-created_at')  # Sort by newest first
 
     if query:
         job_posts = job_posts.filter(
@@ -76,6 +79,7 @@ def posted_job(request):
         'page_obj': page_obj,
         'query': query,
     })
+
 
 def job_search(request):
     form = JobSearchForm(request.GET or None)
@@ -112,23 +116,28 @@ def job_search(request):
 
 def job_detail(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
-    user = request.user
+    latest_application = Application.objects.filter(job_post=job, user=request.user).order_by('-timestamp').first()
+
     can_apply = True
+    rejected = False
     reapply_time = None
 
-    if user.is_authenticated and user.is_job_seeker:
-        recent_application = Application.objects.filter(job_post=job, user=user, timestamp__gte=timezone.now() - timedelta(days=1)).first()
-        if recent_application:
+    if latest_application:
+        if latest_application.status in ["pending", "hired"]:
             can_apply = False
-            reapply_time = recent_application.timestamp + timedelta(days=1)
+        elif latest_application.status == "rejected":
+            rejected = True
+            reapply_time = latest_application.timestamp + timedelta(days=180)
+            if reapply_time > datetime.now():
+                can_apply = False  # Cooldown still active
 
-    context = {
-        'job': job,
-        'can_apply': can_apply,
-        'reapply_time': reapply_time,
-        'user_has_applied': Application.objects.filter(job_post=job, user=user).exists()
-    }
-    return render(request, 'jobs/job_detail.html', context)
+    return render(request, "jobs/job_detail.html", {
+        "job": job,
+        "can_apply": can_apply,
+        "reapply_time": reapply_time,
+        "rejected": rejected,
+        "user_has_applied": latest_application is not None
+    })
 
 @login_required
 def job_alerts(request):
@@ -224,37 +233,38 @@ def send_job_alerts():
 
 @login_required
 def apply_for_job(request, job_id):
-    job = get_object_or_404(JobPost, id=job_id)
+    job_post = get_object_or_404(JobPost, id=job_id)
     user = request.user
 
-    if user.is_job_seeker:
-        # Check if the user has applied within the last 24 hours
-        recent_application = Application.objects.filter(job_post=job, user=user, timestamp__gte=timezone.now() - timedelta(days=1)).exists()
-        if recent_application:
-            return render(request, 'accounts/error.html', {'message': 'You cannot reapply for this job within 24 hours of your last application or cancellation.'})
+    # Check for previous applications
+    previous_application = Application.objects.filter(job_post=job_post, user=user).order_by('-timestamp').first()
 
-        # Save the application in the database
-        Application.objects.create(job_post=job, user=user, timestamp=timezone.now())
+    if previous_application:
+        # Enforce cooldown based on last application timestamp
+        cooldown_period = timedelta(days=180)
+        if timezone.now() - previous_application.timestamp < cooldown_period:
+            return render(request, 'error.html', {
+                "error_message": "You have already applied for this job. Please wait 6 months before reapplying."
+            })
 
-        # Send email notification to the employer
-        message = f"{user.username} has applied for your job posting: {job.title}"
-        send_mail(
-            'Job Application Received',
-            message,
-            settings.EMAIL_HOST_USER,
-            [job.employer.email],
-            fail_silently=False,
-        )
+    # Create a new application
+    application = Application.objects.create(job_post=job_post, user=user, status="pending")
 
-        # Create a notification
-        if not Notification.objects.filter(sender=user, recipient=job.employer, verb=message, target=job).exists():
-            notification = notify(sender=user, recipient=job.employer, verb=message, target=job)
-            print(f"Notification created: {notification}, Sender: {notification.sender}, Sender ID: {notification.sender.id}")
+    # Manually create a Notification instead of using notify()
+    Notification.objects.create(
+        sender=user,
+        recipient=job_post.employer,
+        verb=f"{user.username} has applied for {job_post.title} at {job_post.location}.",
+        target=job_post,
+        extra_data={
+        "application_id": application.id,
+        "job_id": job_post.id,  
+        "applied_timestamp": str(application.timestamp)
+    }
+    )
 
-        return redirect('job_detail', job_id=job.id)
-    else:
-        return render(request, 'accounts/error.html', {'message': 'Please Try Again Later.'})
-    
+    return redirect('jobs:job_detail', job_id=job_post.id)
+
 @login_required
 def cancel_application(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
@@ -268,10 +278,116 @@ def cancel_application(request, job_id):
             message = f"{user.username} has cancelled their application(s) for your job posting: {job.title}"
             send_mail('Job Application Cancelled', message, settings.EMAIL_HOST_USER, [job.employer.email], fail_silently=False)
             notify(sender=user, recipient=job.employer, verb=message, target=job)
-            return redirect('job_detail', job_id=job.id)
+            return redirect('jobs:job_detail', job_id=job.id)
         else:
-            return render(request, 'accounts/error.html', {'message': 'No applications found to cancel.'})
+            return render(request, 'error.html', {'message': 'No applications found to cancel.'})
     else:
-        return render(request, 'accounts/error.html', {'message': 'You are not authorized to cancel this application.'})
+        return render(request, 'error.html', {'message': 'You are not authorized to cancel this application.'})
+
+@login_required
+def hire_job_seeker(request, application_id):
+    application = get_object_or_404(Application, id=application_id)
+    job_post = application.job_post
+
+    if job_post.remaining_slots > 0 and application.status in ['pending', 'rejected']:  # Allow hiring even if previously rejected
+        application.status = 'hired'
+        application.timestamp = timezone.now()  # Update timestamp for tracking
+        job_post.remaining_slots -= 1
+        job_post.save()
+        application.save()
+
+        # Retrieve existing extra_data and update only necessary fields
+        notification, created = Notification.objects.update_or_create(
+            sender=request.user,
+            recipient=application.user,
+            target=job_post,
+            verb=f"You have been hired for {job_post.title} at {job_post.location}.",
+            defaults={"extra_data": {}}
+        )
+
+        # Preserve existing data and update only necessary fields
+        notification.extra_data = {
+            **(notification.extra_data if notification.extra_data else {}),  # Preserve previous data
+            "latest_action": "hired",
+            "latest_timestamp": str(application.timestamp),  # Store latest timestamp
+        }
+        notification.save()
+
+        print(f"Notification Updated: {notification}, Extra Data: {notification.extra_data}")
+
+        return redirect('jobs:applicant_detail', job_post_id=job_post.id, application_id=application.id)
+
+    else:
+        notify(
+            sender=request.user,
+            recipient=application.user,
+            verb=f"You have been hired for {job_post.title} at {job_post.location}, but an error occurred.",
+            target=job_post
+        )
+
+    return redirect('jobs:applicant_detail', job_post_id=job_post.id, application_id=application.id)
+
+@login_required
+def reject_job_seeker(request, application_id):
+    application = get_object_or_404(Application, id=application_id)
+    job_post = application.job_post
+
+    was_hired = application.status == 'hired'
+
+    if application.status in ['pending', 'hired']:  
+        application.status = 'rejected'
+        application.timestamp = timezone.now()  
+        application.save()
+
+        if was_hired:
+            job_post.remaining_slots += 1
+            job_post.save()
+
+        # ✅ Fetch the existing notification (if any) before using it
+        notification = Notification.objects.filter(
+            recipient=application.user,
+            target=job_post
+        ).order_by('-timestamp').first()  # Get the latest notification
+
+        # ✅ Now `notification` exists, so we can safely preserve extra_data
+        Notification.objects.update_or_create(
+            sender=request.user,
+            recipient=application.user,
+            target=application.job_post,
+            verb=f"You have been rejected for {application.job_post.title} at {application.job_post.location}.",
+            defaults={
+                "extra_data": {
+                    **(notification.extra_data if notification and notification.extra_data else {}),  
+                    "application_id": application.id,
+                    "job_id": application.job_post.id,
+                    "latest_action": "rejected",
+                    "latest_timestamp": str(application.timestamp)
+                }
+            }
+        )
+
+        return redirect('jobs:applicant_detail', job_post_id=application.job_post.id, application_id=application.id)
+
+    elif application.status == 'rejected':
+        return render(request, 'error.html', {
+            "error_message": "This application has already been rejected."
+        })
+
+    return render(request, 'error.html', {
+        "error_message": "An error occurred while processing the rejection. Please contact support."
+    })
+
+@login_required
+def applicant_detail(request, job_post_id, application_id):
+    print(f"Job Post ID: {job_post_id}, Application ID: {application_id}") #remove later, just to debug
+    job_post = get_object_or_404(JobPost, id=job_post_id)
+    application = get_object_or_404(Application, id=application_id, job_post=job_post)
+
+    return render(request, 'jobs/applicant_detail.html', {
+        'job_post': job_post,
+        'application': application,
+        'applicant': application.user 
+    })
+
     
 

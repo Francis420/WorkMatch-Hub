@@ -10,9 +10,12 @@
     <form method="get" class="mt-3">
         <div class="input-group mb-3">
             {% csrf_token %}
-            {{ form|crispy }}
+            <input type="text" name="title" class="form-control" placeholder="Job Title" value="{{ request.GET.title|default_if_none:'' }}">
+            <input type="text" name="location" class="form-control" placeholder="Location" value="{{ request.GET.location|default_if_none:'' }}">
+            <input type="number" name="min_salary" class="form-control" placeholder="Min Salary" value="{{ request.GET.min_salary|default_if_none:'' }}">
+            <input type="number" name="max_salary" class="form-control" placeholder="Max Salary" value="{{ request.GET.max_salary|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary">Search</button>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
     <h3 class="mt-4">Job Listings</h3>
@@ -25,9 +28,10 @@
                     <p class="card-text">{{ job.description|truncatewords:20 }}</p>
                     <p class="card-text"><i class="fas fa-map-marker-alt"></i> <strong>Location:</strong> {{ job.location }}</p>
                     <p class="card-text"><i class="fas fa-dollar-sign"></i> <strong>Salary:</strong> {{ job.salary }}</p>
+                    <p class="card-text"><strong>Slots Remaining: </strong>{{ job.remaining_slots }}</p>
                 </div>
                 <div class="card-footer text-end">
-                    <a href="{% url 'job_detail' job.id %}" class="btn btn-primary">View Details</a>
+                    <a href="{% url 'jobs:job_detail' job.id %}" class="btn btn-primary">View Details</a>
                 </div>
             </div>
         </div>
@@ -38,31 +42,31 @@
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1&search={{ search_query }}&status={{ status_filter }}" aria-label="First">
+                    <a class="page-link" href="?page=1&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}" aria-label="First">
                         <span aria-hidden="true">&laquo;&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}" aria-label="Previous">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
             {% endif %}
             {% for num in page_obj.paginator.page_range %}
                 {% if num == page_obj.number %}
-                    <li class="page-item active"><a class="page-link" href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}">{{ num }}</a></li>
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}">{{ num }}</a></li>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item"><a class="page-link" href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}">{{ num }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}">{{ num }}</a></li>
                 {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}" aria-label="Next">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&search={{ search_query }}&status={{ status_filter }}" aria-label="Last">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&title={{ request.GET.title }}&location={{ request.GET.location }}&min_salary={{ request.GET.min_salary }}&max_salary={{ request.GET.max_salary }}" aria-label="Last">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
                 </li>

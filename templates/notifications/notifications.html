@@ -4,7 +4,6 @@
 
 {% block title %}Notifications{% endblock %}
 
-<h2 class="mt-4">Notifications</h2>
 {% block content %}
 <div class="container">
     <h2 class="mt-4">Notifications</h2>
@@ -15,6 +14,8 @@
                     <div class="col-md-4">
                         {% if notification.sender %}
                             {% if "job alert" in notification.verb %}
+                                {{ notification.verb }}
+                            {% elif "hired" in notification.verb or "rejected" in notification.verb %}
                                 {{ notification.verb }}
                             {% else %}
                                 {{ notification.sender.username }} has applied for your job posting: {{ notification.target.title }}
@@ -29,9 +30,17 @@
                     <div class="col-md-4 text-end">
                         {% if notification.sender and notification.sender.id %}
                             {% if "job alert" in notification.verb %}
-                                <a href="{% url 'job_detail' notification.target.id %}" class="btn btn-sm btn-primary view-job">View Job</a>
+                                <a href="{% url 'jobs:job_detail' notification.target.id %}" class="btn btn-sm btn-primary view-job">View Job</a>
+                            {% elif "hired" in notification.verb or "rejected" in notification.verb %}
+                                <a href="{% url 'jobs:job_detail' notification.target.id %}" class="btn btn-sm btn-primary view-job">View Job Post</a>
                             {% else %}
-                                <a href="{% url 'job_seeker_profile' notification.sender.id %}" class="btn btn-sm btn-primary show-profile">Show Profile</a>
+                                {% with job_id=notification.extra_data.job_id|add:"0" application_id=notification.extra_data.application_id|add:"0" %}
+                                    {% if job_id and application_id %}
+                                        <a href="{% url 'jobs:applicant_detail' job_id application_id %}" class="btn btn-sm btn-primary show-profile">View Applicant</a>
+                                    {% else %}
+                                        <span class="text-muted">Application not available</span>
+                                    {% endif %}
+                                {% endwith %}
                             {% endif %}
                         {% else %}
                             <span class="text-muted">Profile not available</span>

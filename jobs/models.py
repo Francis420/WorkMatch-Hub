@@ -24,6 +24,8 @@ class JobPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     job_duration = models.CharField(max_length=255, blank=True, null=True)
     job_type = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES, default='contract')
+    total_slots = models.PositiveIntegerField(default=0)
+    remaining_slots = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -40,10 +42,17 @@ class JobAlert(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Job Alert"
 
+STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('hired', 'Hired'),
+    ('rejected', 'Rejected'),
+]
+
 class Application(models.Model):
     job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
     def __str__(self):
         return f"{self.user.username} - {self.job_post.title}"

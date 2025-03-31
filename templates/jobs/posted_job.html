@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-4">Job Listings</h1>
-    <form method="GET" action="{% url 'posted_job' %}" class="form-inline my-2 my-lg-0">
+    <form method="GET" action="{% url 'jobs:posted_job' %}" class="form-inline my-2 my-lg-0">
         <div class="input-group mb-3">
             <input class="form-control mr-sm-2" type="search" placeholder="Search by title or description" aria-label="Search" name="q" value="{{ query }}">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -19,8 +19,8 @@
                 <h2>{{ job.title }}</h2>
                 <p>{{ job.description }}</p>
                 <p><strong>Employer:</strong> {{ job.employer.username }}</p>
-                <a href="{% url 'update_job' job.id %}" class="btn btn-primary">Update</a>
-                <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'jobs:update_job' job.id %}" class="btn btn-primary">Update</a>
+                <a href="{% url 'jobs:delete_job' job.id %}" class="btn btn-danger">Delete</a>
             </li>
             <br>
         {% endfor %}

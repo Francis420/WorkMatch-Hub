@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Applicant Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column: Job Post Details -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>Job Post Details</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Job Title:</strong> {{ job_post.title }}</p>
+                    <p><strong>Description:</strong> {{ job_post.description }}</p>
+                    <p><strong>Requirements:</strong> {{ job_post.requirements }}</p>
+                    <p><strong>Location:</strong> {{ job_post.location }}</p>
+                    <p><strong>Salary:</strong> {{ job_post.salary }}</p>
+                    <p><strong>Duration:</strong> {{ job_post.job_duration }}</p>
+                    <p><strong>Job Type:</strong> {{ job_post.get_job_type_display }}</p>
+                    <p><strong>Remaining Slots:</strong> {{ job_post.remaining_slots }}</p>
+                    {% if job_post.remaining_slots == 0 %}
+                        <p class="text-danger">All slots are filled. 
+                            <a href="{% url 'jobs:update_job_post' job_post.id %}">Update Job Post</a>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Applicant Details -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h4>Applicant Profile</h4>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{% if application.user.profile and application.user.profile.profile_picture %}{{ application.user.profile.profile_picture.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
+                         alt="Profile Picture" class="img-fluid rounded-circle mb-3" 
+                         style="width: 120px; height: 120px; border: 3px solid #ddd; padding: 5px;">
+                    
+                    <h5 class="mb-1">{{ application.user.profile.full_name|default:"Not Available" }}</h5>
+                    <p class="text-muted">{{ application.user.email|default:"Not Available" }}</p>
+                    <p><strong>Skills:</strong> {{ application.user.profile.skills|default:"Not Available" }}</p>
+                    <p><strong>Experience:</strong> {{ application.user.profile.experience|default:"Not Available" }}</p>
+                    <p><strong>Education:</strong> {{ application.user.profile.education|default:"Not Available" }}</p>
+                    <p><strong>Contact:</strong> {{ application.user.profile.contact_number|default:"Not Available" }}</p>
+                    {% if application.user.profile.facebook_link %}
+                        <p><strong>Facebook:</strong> 
+                            <a href="{{ application.user.profile.facebook_link }}" target="_blank">View Profile</a>
+                        </p>
+                    {% endif %}
+                    {% if application.user.profile.resume %}
+                        <a href="{{ application.user.profile.resume.url }}" class="btn btn-outline-secondary mt-2">Download Resume</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mt-4">
+        {% if user.is_authenticated %}
+            {% if user.is_job_seeker %}
+                <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary">Update Profile</a>
+            {% else %}
+                <a href="{% url 'notifications' %}" class="btn btn-secondary">Back to Notifications</a>
+                <div class="mt-3">
+                    {% if application.status == 'hired' %}
+                        <p class="text-white bg-success p-2 rounded">This applicant has already been hired.</p>
+                    {% elif application.status == 'rejected' %}
+                        <p class="text-white bg-danger p-2 rounded">This applicant has already been rejected.</p>
+                    {% endif %}
+                </div>
+                {% if job_post.remaining_slots == 0 %}
+                    <button class="btn btn-success" disabled>Hire</button>
+                    <button class="btn btn-danger" disabled>Reject</button>
+                {% else %}
+                    <a href="{% url 'jobs:hire_job_seeker' application.id %}" 
+                       class="btn btn-success {% if application.status == 'hired' %}disabled{% endif %}"
+                       onclick="return confirmAction('hire', '{{ application.user.profile.full_name|default:"this applicant" }}', '{{ job_post.title }}')">
+                        Hire
+                    </a>
+                    <a href="{% url 'jobs:reject_job_seeker' application.id %}" 
+                       class="btn btn-danger {% if application.status == 'rejected' %}disabled{% endif %}"
+                       onclick="return confirmAction('reject', '{{ application.user.profile.full_name|default:"this applicant" }}', '{{ job_post.title }}')">
+                        Reject
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function confirmAction(action, jobSeeker, jobTitle) {
+        let message = action === 'hire' 
+            ? `Are you sure you want to hire ${jobSeeker} for ${jobTitle}?`
+            : `Are you sure you want to reject ${jobSeeker} for ${jobTitle}?`;
+        return confirm(message);
+    }
+</script>
+{% endblock %}
