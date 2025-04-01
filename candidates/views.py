@@ -22,7 +22,9 @@ def candidate_search(request):
         if form.cleaned_data['location']:
             candidates = candidates.filter(profile__location__icontains=form.cleaned_data['location'])
 
-    paginator = Paginator(candidates, 3)  # number of results per page
+    candidates = candidates.order_by('username') 
+
+    paginator = Paginator(candidates, 3) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

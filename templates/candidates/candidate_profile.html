@@ -5,35 +5,146 @@
 {% block title %}Candidate Profile{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="mt-4">{{ candidate.username }}'s Profile</h1>
-    <div class="card mt-3">
+<div class="container mt-5">
+    <!-- Profile Header -->
+    <h2 class="mt-4 profile-header">{{ candidate.username }}'s Profile</h2>
+
+    <div class="card mt-3 shadow-lg border-light" style="background-color: #ffffff;">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4 text-center">
+                <!-- Profile Picture Section -->
+                <div class="col-md-4 text-center mb-4">
                     {% if candidate.profile.profile_picture %}
-                        <img src="{{ candidate.profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                        <img src="{{ candidate.profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
                     {% else %}
-                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
                     {% endif %}
                 </div>
+
+                <!-- Profile Details Section -->
                 <div class="col-md-8">
-                    <p><strong>Full Name:</strong> {{ candidate.profile.full_name }}</p>
-                    <p><strong>Email:</strong> {{ candidate.email }}</p>
-                    <p><strong>Skills:</strong> {{ candidate.profile.skills }}</p>
-                    <p><strong>Experience:</strong> {{ candidate.profile.experience }}</p>
-                    <p><strong>Education:</strong> {{ candidate.profile.education }}</p>
-                    <p><strong>Location:</strong> {{ candidate.profile.location }}</p>
-                    <p><strong>Job Preferences:</strong> {{ candidate.profile.job_preferences }}</p>
-                    <p><strong>Availability:</strong> {{ candidate.profile.availability }}</p>
-                    <p><strong>Contact Number:</strong> {{ candidate.profile.contact_number }}</p>
-                    <p><strong>Facebook:</strong> <a href="{{ candidate.profile.facebook_link }}" target="_blank">{{ candidate.profile.facebook_link }}</a></p>
-                    {% if candidate.profile.resume %}
-                        <a href="{{ candidate.profile.resume.url }}" target="_blank" class="btn btn-secondary mt-2">Show Resume</a>
-                    {% endif %}
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <strong>Full Name:</strong> <span>{{ candidate.profile.full_name }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Email:</strong> <span>{{ candidate.email }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Skills:</strong> <span>{{ candidate.profile.skills }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Experience:</strong> <span>{{ candidate.profile.experience }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Education:</strong> <span>{{ candidate.profile.education }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Location:</strong> <span>{{ candidate.profile.location }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Job Preferences:</strong> <span>{{ candidate.profile.job_preferences }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Availability:</strong> <span>{{ candidate.profile.availability }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Contact Number:</strong> <span>{{ candidate.profile.contact_number }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Facebook:</strong> 
+                            {% if candidate.profile.facebook_link %}
+                                <a href="{{ candidate.profile.facebook_link }}" target="_blank" class="text-primary">{{ candidate.profile.facebook_link }}</a>
+                            {% else %}
+                                <span class="text-muted">Not Provided</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% if candidate.profile.resume %}
+                            <a href="{% url 'view_resume' candidate.profile.id %}" class="btn btn-secondary mt-2" target="_blank" rel="noopener noreferrer">Show Resume</a>
+                        {% else %}
+                            <button class="btn btn-secondary mt-2" disabled>No Resume Uploaded</button>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'candidate_search' %}" class="btn btn-primary mt-3">Back to Candidates</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f2f2f2, #d0e6f4);
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 12px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .list-group-item {
+        font-size: 1.1rem;
+        padding: 15px;
+        border: 1px solid #f1f1f1;
+        background-color: #f9f9f9;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9e9e9;
+        cursor: pointer;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .profile-header {
+        background-color: #007bff;  /* Blue background */
+        color: #ffffff;  /* White text */
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Slightly stronger shadow */
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+    
+    footer {
+        margin-top: 20px;
+    }
+</style>
+
 {% endblock %}

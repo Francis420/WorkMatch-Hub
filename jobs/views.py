@@ -327,7 +327,7 @@ def hire_job_seeker(request, application_id):
         }
         notification.save()
 
-        print(f"Notification Updated: {notification}, Extra Data: {notification.extra_data}")
+        print(f"Notification Updated: {notification}, Extra Data: {notification.extra_data}") #remove later, just to debug
 
         return redirect('jobs:applicant_detail', job_post_id=job_post.id, application_id=application.id)
 

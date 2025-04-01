@@ -6,55 +6,138 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">Job Seeker Profile</h1>
-    <div class="card mt-3">
+    <!-- Profile Header -->
+    <h2 class="mt-4 profile-header">{{ profile.full_name }}'s Profile</h2>
+
+    <div class="card mt-3 shadow-lg border-light" style="background-color: #ffffff;">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4 text-center">
+                <!-- Profile Picture Section -->
+                <div class="col-md-4 text-center mb-4">
                     {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
                     {% else %}
-                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 2px solid #ddd; padding: 5px;">
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
                     {% endif %}
                 </div>
+
+                <!-- Profile Details Section -->
                 <div class="col-md-8">
-                    <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
-                    <p><strong>Email:</strong> {{ profile.user.email }}</p>
-                    <p><strong>Skills:</strong> {{ profile.skills }}</p>
-                    <p><strong>Experience:</strong> {{ profile.experience }}</p>
-                    <p><strong>Education:</strong> {{ profile.education }}</p>
-                    <p><strong>Location:</strong> {{ profile.location }}</p>
-                    <p><strong>Job Preferences:</strong> {{ profile.job_preferences }}</p>
-                    <p><strong>Availability:</strong> {{ profile.availability }}</p>
-                    <p><strong>Contact Number:</strong> {{ profile.contact_number }}</p>
-                    <p><strong>Facebook:</strong> <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a></p>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <strong>Full Name:</strong> <span>{{ profile.full_name }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Email:</strong> <span>{{ profile.user.email }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Skills:</strong> <span>{{ profile.skills }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Experience:</strong> <span>{{ profile.experience }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Education:</strong> <span>{{ profile.education }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Location:</strong> <span>{{ profile.location }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Job Preferences:</strong> <span>{{ profile.job_preferences }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Availability:</strong> <span>{{ profile.availability }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Contact Number:</strong> <span>{{ profile.contact_number }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Facebook:</strong> <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center">
+                            <a href="{{ profile.resume.url }}" class="btn btn-secondary mt-2">Show Resume</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
                 </div>
             </div>
-            {% if profile.resume %}
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <a href="{{ profile.resume.url }}" class="btn btn-secondary mt-2">Download Resume</a>
-                    </div>
-                </div>
-            {% endif %}
-            {% if user.is_authenticated %}
-                {% if user.is_job_seeker %}
-                    <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
-                {% else %}
-                    <a href="{% url 'notifications' %}" class="btn btn-primary mt-3">Back to Notifications</a>
-                    {% for application in applications %}
-                        {% if application.job_post.remaining_slots == 0 %}
-                            <p class="text-danger">All slots filled. <a href="{% url 'jobs:update_job' application.job_post.id %}">Update the job post to add more employees</a></p>
-                            <a href="{% url 'jobs:hire_job_seeker' application.id %}" class="btn btn-success mt-3 disabled">Hire</a>
-                            <a href="{% url 'jobs:reject_job_seeker' application.id %}" class="btn btn-danger mt-3 disabled">Reject</a>
-                        {% else %}
-                            <a href="{% url 'jobs:hire_job_seeker' application.id %}" class="btn btn-success mt-3 {% if application.status == 'hired' %}disabled{% endif %}">Hire</a>
-                            <a href="{% url 'jobs:reject_job_seeker' application.id %}" class="btn btn-danger mt-3 {% if application.status == 'rejected' %}disabled{% endif %}">Reject</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endif %}
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f2f2f2, #d0e6f4);
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 12px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+    
+    footer {
+        margin-top: 20px;
+    }
+
+    .list-group-item {
+        font-size: 1.1rem;
+        padding: 15px;
+        border: 1px solid #f1f1f1;
+        background-color: #f9f9f9;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9e9e9;
+        cursor: pointer;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .profile-header {
+        background-color: #007bff;  /* Blue background */
+        color: #ffffff;  /* White text */
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Slightly stronger shadow */
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+</style>
+
 {% endblock %}

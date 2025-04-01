@@ -29,8 +29,8 @@ class Profile(models.Model):
     availability = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(unique=True, max_length=255, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)
-    facebook_link = models.URLField(blank=True, null=True) 
-
+    facebook_link = models.URLField(blank=True, null=True)
+    
     # Employer fields
     employer_name = models.CharField(max_length=255, blank=True, null=True)
     company_logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)

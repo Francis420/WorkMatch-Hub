@@ -6,19 +6,134 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">Employer Profile</h1>
-    <div class="card mt-3">
+    <!-- Profile Header -->
+    <h2 class="mt-4 profile-header">{{ profile.employer_name }}'s Profile</h2>
+
+    <div class="card mt-3 shadow-lg border-light" style="background-color: #ffffff;">
         <div class="card-body">
-            <h5 class="card-title">{{ profile.employer_name }}</h5>
-            <p class="card-text">Email: {{ profile.user.email }}</p>
-            <p class="card-text">Company Description: {{ profile.company_description }}</p>
-            <p class="card-text">Industry: {{ profile.industry }}</p>
-            <p class="card-text">Website: <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
-            <p class="card-text">Contact Person: {{ profile.contact_person }}</p>
-            <p class="card-text">Contact Number: {{ profile.contact_number }}</p>
-            <p class="card-text">Facebook: <a href="{{ profile.facebook_link }}" target="_blank">{{ profile.facebook_link }}</a></p>
-            <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
+            <div class="row">
+                <!-- Profile Picture Section -->
+                <div class="col-md-4 text-center mb-4">
+                    {% if profile.company_logo %}
+                        <img src="{{ profile.company_logo.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 180px; height: 180px; border: 3px solid #ddd; object-fit: cover;">
+                    {% endif %}
+                </div>
+
+                <!-- Profile Details Section -->
+                <div class="col-md-8">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <strong>Employer Name:</strong> <span>{{ profile.employer_name }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Email:</strong> <span>{{ profile.user.email }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Company Description:</strong> <span>{{ profile.company_description }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Industry:</strong> <span>{{ profile.industry }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Website:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Contact Person:</strong> <span>{{ profile.contact_person }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Contact Number:</strong> <span>{{ profile.contact_number }}</span>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>Facebook:</strong>
+                            {% if profile.facebook_link %}
+                                <a href="{{ profile.facebook_link }}" target="_blank" class="text-primary">{{ profile.facebook_link }}</a>
+                            {% else %}
+                                <span class="text-muted">Not Provided</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f2f2f2, #d0e6f4);
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 12px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .list-group-item {
+        font-size: 1.1rem;
+        padding: 15px;
+        border: 1px solid #f1f1f1;
+        background-color: #f9f9f9;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9e9e9;
+        cursor: pointer;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .profile-header {
+        background-color: #007bff;  /* Blue background */
+        color: #ffffff;  /* White text */
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Slightly stronger shadow */
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }     
+
+    footer {
+        margin-top: 20px;
+    }
+</style>
+
 {% endblock %}

@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block title %}Applicant Detail{% endblock %}
 
@@ -8,10 +7,10 @@
 <div class="container mt-4">
     <div class="row">
         <!-- Left Column: Job Post Details -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-light">
                 <div class="card-header bg-primary text-white">
-                    <h4>Job Post Details</h4>
+                    <h4 class="mb-0">Job Post Details</h4>
                 </div>
                 <div class="card-body">
                     <p><strong>Job Title:</strong> {{ job_post.title }}</p>
@@ -22,9 +21,11 @@
                     <p><strong>Duration:</strong> {{ job_post.job_duration }}</p>
                     <p><strong>Job Type:</strong> {{ job_post.get_job_type_display }}</p>
                     <p><strong>Remaining Slots:</strong> {{ job_post.remaining_slots }}</p>
+
                     {% if job_post.remaining_slots == 0 %}
-                        <p class="text-danger">All slots are filled. 
-                            <a href="{% url 'jobs:update_job_post' job_post.id %}">Update Job Post</a>
+                        <p class="text-danger mt-2">
+                            All slots are filled. 
+                            <a href="{% url 'jobs:update_job_post' job_post.id %}" class="btn btn-warning btn-sm">Update Job Post</a>
                         </p>
                     {% endif %}
                 </div>
@@ -32,10 +33,10 @@
         </div>
 
         <!-- Right Column: Applicant Details -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-light">
                 <div class="card-header bg-secondary text-white">
-                    <h4>Applicant Profile</h4>
+                    <h4 class="mb-0">Applicant Profile</h4>
                 </div>
                 <div class="card-body text-center">
                     <img src="{% if application.user.profile and application.user.profile.profile_picture %}{{ application.user.profile.profile_picture.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" 
@@ -44,17 +45,21 @@
                     
                     <h5 class="mb-1">{{ application.user.profile.full_name|default:"Not Available" }}</h5>
                     <p class="text-muted">{{ application.user.email|default:"Not Available" }}</p>
+                    
                     <p><strong>Skills:</strong> {{ application.user.profile.skills|default:"Not Available" }}</p>
                     <p><strong>Experience:</strong> {{ application.user.profile.experience|default:"Not Available" }}</p>
                     <p><strong>Education:</strong> {{ application.user.profile.education|default:"Not Available" }}</p>
                     <p><strong>Contact:</strong> {{ application.user.profile.contact_number|default:"Not Available" }}</p>
+
                     {% if application.user.profile.facebook_link %}
                         <p><strong>Facebook:</strong> 
                             <a href="{{ application.user.profile.facebook_link }}" target="_blank">View Profile</a>
                         </p>
                     {% endif %}
                     {% if application.user.profile.resume %}
-                        <a href="{{ application.user.profile.resume.url }}" class="btn btn-outline-secondary mt-2">Download Resume</a>
+                        <a href="{% url 'view_resume' application.user.id %}" class="btn btn-secondary mt-2" target="_blank" rel="noopener noreferrer">Show Resume</a>
+                    {% else %}
+                        <button class="btn btn-secondary mt-2" disabled>No Resume Uploaded</button>
                     {% endif %}
                 </div>
             </div>
@@ -68,19 +73,21 @@
                 <a href="{% url 'edit_job_seeker_profile' %}" class="btn btn-primary">Update Profile</a>
             {% else %}
                 <a href="{% url 'notifications' %}" class="btn btn-secondary">Back to Notifications</a>
+    
                 <div class="mt-3">
                     {% if application.status == 'hired' %}
-                        <p class="text-white bg-success p-2 rounded">This applicant has already been hired.</p>
+                        <p class="status-message bg-success">This applicant has already been hired.</p>
                     {% elif application.status == 'rejected' %}
-                        <p class="text-white bg-danger p-2 rounded">This applicant has already been rejected.</p>
+                        <p class="status-message bg-danger">This applicant has already been rejected.</p>
                     {% endif %}
                 </div>
+    
                 {% if job_post.remaining_slots == 0 %}
-                    <button class="btn btn-success" disabled>Hire</button>
-                    <button class="btn btn-danger" disabled>Reject</button>
+                    <button class="btn btn-primary disabled">Hire</button>
+                    <button class="btn btn-danger disabled">Reject</button>
                 {% else %}
                     <a href="{% url 'jobs:hire_job_seeker' application.id %}" 
-                       class="btn btn-success {% if application.status == 'hired' %}disabled{% endif %}"
+                       class="btn btn-primary {% if application.status == 'hired' %}disabled{% endif %}"
                        onclick="return confirmAction('hire', '{{ application.user.profile.full_name|default:"this applicant" }}', '{{ job_post.title }}')">
                         Hire
                     </a>
@@ -94,6 +101,81 @@
         {% endif %}
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f2f2f2, #d0e6f4);
+        background-attachment: fixed;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 8px;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+        font-weight: bold;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .hire-btn {
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hire-btn:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 128, 0, 0.3);
+    }
+
+    .reject-btn {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .reject-btn:hover {
+        background: linear-gradient(135deg, #c82333, #a71d2a);
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(255, 0, 0, 0.3);
+    }
+
+    .btn.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .status-message {
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    footer {
+        margin-top: 20px;
+    }
+</style>
 
 <script>
     function confirmAction(action, jobSeeker, jobTitle) {

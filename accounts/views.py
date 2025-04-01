@@ -12,8 +12,11 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from fuzzywuzzy import fuzz
+from feedback.models import Feedback
 from notifications.utils import notify
 from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from .forms import (
     JobSeekerSignUpForm, 
@@ -78,7 +81,9 @@ def user_list(request):
         elif status_filter == 'inactive':
             users = users.filter(is_active=False)
 
-    paginator = Paginator(users, 5)  # show number of results per page
+    users = users.order_by('username')
+
+    paginator = Paginator(users, 5) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -156,6 +161,31 @@ def view_audit_logs(request):
         'action_filter': action_filter,
         'start_date': start_date,
         'end_date': end_date,
+    })
+
+@staff_member_required
+def view_feedbacks(request):
+    search_query = request.GET.get('search', '')
+    issue_type_filter = request.GET.get('issue_type', '')
+
+    feedbacks = Feedback.objects.all()
+
+    if search_query:
+        feedbacks = feedbacks.filter(description__icontains=search_query)
+
+    if issue_type_filter:
+        feedbacks = feedbacks.filter(issue_type=issue_type_filter)
+
+    feedbacks = feedbacks.order_by('-created_at')
+
+    paginator = Paginator(feedbacks, 10)  # number of results per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'accounts/view_feedbacks.html', {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'issue_type_filter': issue_type_filter,
     })
 
 def home(request):
@@ -283,6 +313,7 @@ def edit_job_seeker_profile(request):
     user = request.user
     if user.is_job_seeker:
         profile, created = Profile.objects.get_or_create(user=user)
+        
         if request.method == 'POST':
             form = JobSeekerProfileForm(request.POST, request.FILES, instance=profile)
             if form.is_valid():
@@ -290,6 +321,7 @@ def edit_job_seeker_profile(request):
                 return redirect('job_seeker_profile', pk=user.pk)
         else:
             form = JobSeekerProfileForm(instance=profile)
+        
         return render(request, 'accounts/edit_job_seeker_profile.html', {'form': form})
     else:
         return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
@@ -309,3 +341,15 @@ def edit_employer_profile(request):
         return render(request, 'accounts/edit_employer_profile.html', {'form': form})
     else:
         return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
+    
+def resume_view(request, profile_id):
+    # Get the Profile object (the candidate's profile)
+    profile = get_object_or_404(Profile, id=profile_id)
+    
+    if profile.resume:
+        with open(profile.resume.path, 'rb') as pdf_file:
+            response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="resume.pdf"'
+            return response
+    else:
+        return HttpResponse("No Resume Uploaded", status=404)

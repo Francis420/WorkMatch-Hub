@@ -2,89 +2,101 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block title %}Job Details{% endblock %}
+{% block title %}{{ job.title }} - Job Details{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="row">
+        <!-- Job Details Section -->
         <div class="col-md-8 mb-3">
-            <div class="card shadow-sm p-4">
+            <div class="card shadow-sm p-4 border-0">
                 <div class="card-body">
-                    <h3 class="card-title">{{ job.title }}</h3>
-                    <p class="text-muted">{{ job.get_job_type_display }} - {{ job.location }}</p>
+                    <h3 class="card-title text-primary fw-bold">{{ job.title }}</h3>
+                    <p class="text-muted"><i class="fas fa-briefcase"></i> {{ job.get_job_type_display }} | <i class="fas fa-map-marker-alt"></i> {{ job.location }}</p>
                     <hr>
-                    <h4>Job Description</h4>
+                    
+                    <h4 class="text-secondary">📌 Job Description</h4>
                     <p>{{ job.description }}</p>
-                    <h4>Requirements</h4>
+
+                    <h4 class="text-secondary">📋 Requirements</h4>
                     <p>{{ job.requirements }}</p>
-                    <h4>Job Details</h4>
-                    <ul class="list-unstyled">
-                        <li><strong>Salary:</strong> {{ job.salary }}</li>
-                        <li><strong>Job Duration:</strong> {{ job.job_duration }}</li>
-                        <li><strong>Total Slots:</strong> {{ job.total_slots }}</li>
-                        <li><strong>Slots Remaining:</strong> {{ job.remaining_slots }}</li>
+
+                    <h4 class="text-secondary">💰 Job Details</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Salary:</strong> <span class="text-success">${{ job.salary }}</span></li>
+                        <li class="list-group-item"><strong>Job Duration:</strong> {{ job.job_duration }}</li>
+                        <li class="list-group-item"><strong>Total Slots:</strong> {{ job.total_slots }}</li>
+                        <li class="list-group-item"><strong>Slots Remaining:</strong> <span class="badge bg-info">{{ job.remaining_slots }}</span></li>
                     </ul>
                 </div>
             </div>
         </div>
+
+        <!-- Employer Information -->
         <div class="col-md-4 mb-3">
-            <div class="card shadow-sm p-4">
-                <div class="card-body">
-                    <h4>Employer Information</h4>
-                    <p><strong>Name:</strong> {{ job.employer.profile.employer_name }}</p>
-                    <p><strong>Email:</strong> <a href="mailto:{{ job.employer.email }}">{{ job.employer.email }}</a></p>
-                    <p><strong>Contact:</strong> {{ job.employer.profile.contact_number }}</p>
-                    <p><strong>Industry:</strong> {{ job.employer.profile.industry }}</p>
-                    {% if job.employer.profile.website %}
-                        <p><strong>Website:</strong> <a href="{{ job.employer.profile.website }}" target="_blank">{{ job.employer.profile.website }}</a></p>
-                    {% endif %}
-                    {% if job.employer.profile.company_logo %}
-                        <img src="{{ job.employer.profile.company_logo.url }}" alt="Company Logo" class="img-fluid mt-3">
-                    {% endif %}
+            <div class="card shadow-sm p-4 border-0 text-center">
+                {% if job.employer.profile.company_logo %}
+                    <img src="{{ job.employer.profile.company_logo.url }}" alt="Company Logo" class="img-fluid rounded-circle mb-3" style="max-width: 120px;">
+                {% endif %}
+                <h4 class="fw-bold text-dark">{{ job.employer.profile.employer_name }}</h4>
+                <p class="text-muted">{{ job.employer.profile.industry }}</p>
+                <hr>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:{{ job.employer.email }}" class="text-decoration-none">{{ job.employer.email }}</a></p>
+                <p><i class="fas fa-phone"></i> {{ job.employer.profile.contact_number }}</p>
+                {% if job.employer.profile.website %}
+                    <p><i class="fas fa-globe"></i> <a href="{{ job.employer.profile.website }}" target="_blank" class="text-decoration-none">{{ job.employer.profile.website }}</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Status Section -->
+    <div class="text-center mt-4">
+        {% if hired %}
+            <div class="alert alert-success py-4">
+                <h5 class="fw-bold text-white">🎉 Congratulations! 🎉</h5>
+                <p class="text-light">You were hired on <strong>{{ hired_date|date:"F j, Y, g:i A" }}</strong>.</p>
+            </div>
+            <button class="btn btn-success w-100" disabled>✅ Hired</button>
+
+        {% elif rejected and reapply_time %}
+            <div class="alert alert-danger py-4">
+                <h5 class="fw-bold text-white">You were rejected.</h5>
+                <p class="text-light">You can reapply after:</p>
+                <p class="fw-bold fs-5 text-light" id="countdown-timer"></p>
+                <div class="progress mt-2">
+                    <div id="countdown-progress" class="progress-bar bg-light" role="progressbar" style="width: 0%; transition: width 0.5s;"></div>
                 </div>
             </div>
-        </div>
-    </div>
+            <button class="btn btn-secondary w-100" disabled>⏳ Apply (Cooldown Active)</button>
 
-    {% if hired %}
-        <div class="alert alert-success text-center py-4">
-            <h5 class="fw-bold text-white">🎉 Congratulations! 🎉</h5>
-            <p class="text-light">You were hired for this job on <strong>{{ hired_date|date:"F j, Y, g:i A" }}</strong>.</p>
-        </div>
-        <button class="btn btn-success w-100" disabled>🎉 Hired - Congratulations!</button>
-
-    {% elif rejected and reapply_time %}
-        <div class="alert alert-danger text-center py-4">
-            <h5 class="fw-bold text-white">You were rejected.</h5>
-            <p class="text-light">You can reapply after:</p>
-            <p class="fw-bold text-light" id="countdown-timer"></p> <!-- Countdown Timer -->
-            <div class="progress mt-2">
-                <div id="countdown-progress" class="progress-bar bg-light" role="progressbar" style="width: 0%;"></div>
+        {% elif pending %}
+            <div class="alert alert-warning py-4">
+                <h5 class="fw-bold text-dark">📩 Application Received!</h5>
+                <p class="text-dark">Submitted on <strong>{{ pending_since|date:"F j, Y, g:i A" }}</strong>.</p>
+                <p class="text-dark">Waiting for employer review.</p>
             </div>
-        </div>
-        <button class="btn btn-secondary w-100" disabled>Apply (Cooldown Active)</button>
+            <button class="btn btn-warning w-100" disabled>⏳ Application Pending...</button>
 
-    {% elif pending %}
-        <div class="alert alert-warning text-center py-4">
-            <h5 class="fw-bold text-dark">Application Received!</h5>
-            <p class="text-dark">Your application was submitted on <strong>{{ pending_since|date:"F j, Y, g:i A" }}</strong>.</p>
-            <p class="text-dark">Please wait for the employer to process your application.</p>
-        </div>
-        <button class="btn btn-warning w-100" disabled>Application Pending...</button>
-
-    {% else %}
-        <a href="{% url 'jobs:apply_for_job' job.id %}" class="btn btn-primary w-100">Apply for this job</a>
-    {% endif %}
-
-    {% if job.employer == user %}
-        <a href="{% url 'jobs:update_job' job.id %}" class="btn btn-warning w-100 mt-2">Update Job</a>
-        <a href="{% url 'jobs:delete_job' job.id %}" class="btn btn-danger w-100 mt-2">Delete Job</a>
-    {% endif %}
-
-    <div class="mt-3 text-center">
-        <a href="javascript:history.back()" class="btn btn-outline-secondary">Go Back</a>
+        {% else %}
+            <a href="{% url 'jobs:apply_for_job' job.id %}" class="btn btn-primary w-100">🚀 Apply for this Job</a>
+        {% endif %}
     </div>
 
+    <!-- Employer Controls -->
+    {% if job.employer == user %}
+        <div class="mt-3">
+            <a href="{% url 'jobs:update_job' job.id %}" class="btn btn-warning w-100">✏️ Update Job</a>
+            <a href="{% url 'jobs:delete_job' job.id %}" class="btn btn-danger w-100 mt-2">🗑 Delete Job</a>
+        </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="mt-4 text-center">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <!-- Cooldown Timer Script -->
     {% if rejected and reapply_time %}
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -98,7 +110,7 @@
             const distance = endTime - now;
 
             if (distance <= 0) {
-                countdownElement.innerHTML = "<span class='text-success fw-bold'>You can now reapply!</span>";
+                countdownElement.innerHTML = "<span class='text-success fw-bold'>✅ You can now reapply!</span>";
                 progressBar.style.width = "100%";
                 progressBar.classList.replace("bg-light", "bg-success");
                 progressBar.textContent = "Ready!";
@@ -112,14 +124,10 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            countdownElement.innerHTML = `
-                <span class="fw-bold fs-4">${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds</span>
-            `;
-
-            const totalDuration = endTime - startTime;
-            const progress = ((totalDuration - distance) / totalDuration) * 100;
+            countdownElement.innerHTML = `<span class="fw-bold">${months}m ${days}d ${hours}h ${minutes}m ${seconds}s</span>`;
+            
+            const progress = ((startTime - now) / (startTime - endTime)) * 100;
             progressBar.style.width = `${progress}%`;
-            progressBar.textContent = `${Math.round(progress)}%`;
         }
 
         updateCountdown();
