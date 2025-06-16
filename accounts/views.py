@@ -258,7 +258,6 @@ def send_employer_notifications():
                     fail_silently=False,
                 )
 
-                # Create real-time notifications
                 notify(
                     sender=candidate,
                     recipient=job.employer,
@@ -343,7 +342,6 @@ def edit_employer_profile(request):
         return render(request, 'error.html', {'message': 'You are not authorized to view this page.'})
     
 def resume_view(request, profile_id):
-    # Get the Profile object (the candidate's profile)
     profile = get_object_or_404(Profile, id=profile_id)
     
     if profile.resume:

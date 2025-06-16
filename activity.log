@@ -28824,3 +28824,424 @@ C:\Users\user\Desktop\sad test\accounts\views.py changed, reloading.
 Watching for file changes with StatReloader
 C:\Users\user\Desktop\sad test\accounts\urls.py changed, reloading.
 Watching for file changes with StatReloader
+User admin2 accessed /candidates/candidate_search/
+"GET /candidates/candidate_search/ HTTP/1.1" 200 12755
+"GET /static/images/default_profile.png HTTP/1.1" 404 1892
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+- Broken pipe from ('127.0.0.1', 59291)
+User admin2 accessed /candidates/candidate/2/
+"GET /candidates/candidate/2/ HTTP/1.1" 200 12414
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+- Broken pipe from ('127.0.0.1', 59299)
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+- Broken pipe from ('127.0.0.1', 59301)
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+"GET /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf HTTP/1.1" 200 1007547
+- Broken pipe from ('127.0.0.1', 59303)
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+- Broken pipe from ('127.0.0.1', 59304)
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+- Broken pipe from ('127.0.0.1', 59307)
+User admin2 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+"GET /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf HTTP/1.1" 200 1007547
+User admin2 accessed /
+"GET / HTTP/1.1" 200 9474
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+- Broken pipe from ('127.0.0.1', 59314)
+User admin2 accessed /candidates/candidate_search/
+"GET /candidates/candidate_search/ HTTP/1.1" 200 12729
+"GET /static/images/default_profile.png HTTP/1.1" 404 1892
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /candidates/candidate/2/
+"GET /candidates/candidate/2/ HTTP/1.1" 200 12414
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /accounts/resume/2/
+"GET /accounts/resume/2/ HTTP/1.1" 200 1007547
+User admin2 accessed /accounts/resume/2/
+"GET /accounts/resume/2/ HTTP/1.1" 200 1007547
+User admin2 accessed /accounts/resume/2/
+- Broken pipe from ('127.0.0.1', 59326)
+User admin2 accessed /accounts/resume/2/
+User admin2 accessed /accounts/resume/2/
+- Broken pipe from ('127.0.0.1', 59327)
+User admin2 accessed /accounts/resume/2/
+- Broken pipe from ('127.0.0.1', 59329)
+- Broken pipe from ('127.0.0.1', 59331)
+User admin2 accessed /accounts/resume/2/
+- Broken pipe from ('127.0.0.1', 59333)
+User admin2 accessed /accounts/resume/2/
+- Broken pipe from ('127.0.0.1', 59335)
+User admin2 accessed /accounts/resume/2/
+"GET /accounts/resume/2/ HTTP/1.1" 200 1007547
+User admin2 accessed /candidates/candidate_search/
+"GET /candidates/candidate_search/ HTTP/1.1" 200 12729
+"GET /static/images/default_profile.png HTTP/1.1" 404 1892
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+- Broken pipe from ('127.0.0.1', 59319)
+User admin2 accessed /jobs/posted_jobs/
+"GET /jobs/posted_jobs/ HTTP/1.1" 200 11790
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /accounts/profile/employer/3/
+"GET /accounts/profile/employer/3/ HTTP/1.1" 200 12481
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /notifications/
+"GET /notifications/ HTTP/1.1" 200 15602
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /jobs/jobs/58/applicant/42/
+"GET /jobs/jobs/58/applicant/42/ HTTP/1.1" 200 12830
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /jobs/jobs/58/applicant/42/
+"GET /jobs/jobs/58/applicant/42/ HTTP/1.1" 200 12791
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /jobs/jobs/58/applicant/42/
+"GET /jobs/jobs/58/applicant/42/ HTTP/1.1" 200 12834
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+User admin2 accessed /accounts/resume/2/
+"GET /accounts/resume/2/ HTTP/1.1" 200 1007547
+User admin2 accessed /
+"GET / HTTP/1.1" 200 9474
+User admin2 accessed /ws/notifications/
+Not Found: /ws/notifications/
+"GET /ws/notifications/ HTTP/1.1" 404 3321
+Not Found: /favicon.ico
+User updated profile: admin4
+User logged in: admin4
+User admin4 accessed /admin/login/
+User admin4 accessed /admin/
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/dashboard.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/img/icon-changelink.svg
+User admin4 accessed /admin/accounts/customuser/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/css/changelists.css
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/icon-yes.svg
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/filters.js
+User admin4 accessed /static/admin/img/icon-no.svg
+User admin4 accessed /static/admin/img/sorting-icons.svg
+User admin4 accessed /static/admin/img/tooltag-add.svg
+User admin4 accessed /static/admin/img/icon-viewlink.svg
+User admin4 accessed /
+User admin4 accessed /static/css/minty.min.css
+User admin4 accessed /admin/accounts/customuser/
+User admin4 accessed /admin/accounts/customuser/1/change/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/admin/DateTimeShortcuts.js
+User admin4 accessed /static/admin/js/calendar.js
+User admin4 accessed /static/admin/js/SelectBox.js
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/js/SelectFilter2.js
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/prepopulate_init.js
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/js/change_form.js
+User admin4 accessed /static/admin/img/icon-unknown-alt.svg
+User admin4 accessed /static/admin/img/icon-calendar.svg
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/selector-icons.svg
+User admin4 accessed /static/admin/img/icon-unknown.svg
+User admin4 accessed /static/admin/img/icon-clock.svg
+User admin4 accessed /admin/accounts/customuser/1/history/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /admin/accounts/customuser/1/change/
+User admin4 accessed /
+User admin4 accessed /static/css/minty.min.css
+User admin4 accessed /accounts/user_list/
+User admin4 accessed /static/css/minty.min.css
+User logged out: admin4
+User updated profile: admin4
+User logged in: admin4
+User admin4 accessed /admin/login/
+User admin4 accessed /admin/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/dashboard.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/img/icon-changelink.svg
+User admin4 accessed /admin/accounts/customuser/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/changelists.css
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/icon-yes.svg
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/filters.js
+User admin4 accessed /static/admin/img/icon-no.svg
+User admin4 accessed /static/admin/img/tooltag-add.svg
+User admin4 accessed /static/admin/img/sorting-icons.svg
+User admin4 accessed /static/admin/img/icon-viewlink.svg
+User admin4 accessed /admin/accounts/customuser/2/change/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/calendar.js
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/js/admin/DateTimeShortcuts.js
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/SelectBox.js
+User admin4 accessed /static/admin/js/SelectFilter2.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/prepopulate_init.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/js/change_form.js
+User admin4 accessed /static/admin/img/icon-clock.svg
+User admin4 accessed /static/admin/img/icon-unknown.svg
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/icon-unknown-alt.svg
+User admin4 accessed /static/admin/img/selector-icons.svg
+User admin4 accessed /static/admin/img/icon-calendar.svg
+User admin4 accessed /admin/accounts/customuser/2/password/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/unusable_password_field.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/unusable_password_field.js
+User admin4 accessed /admin/accounts/customuser/2/password/
+User admin4 accessed /static/admin/css/unusable_password_field.css
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/unusable_password_field.js
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /admin/accounts/customuser/2/password/
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/unusable_password_field.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/unusable_password_field.js
+User admin4 accessed /admin
+User admin4 accessed /admin/
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/dashboard.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/img/icon-changelink.svg
+User admin4 accessed /admin/accounts/customuser/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/changelists.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/img/icon-yes.svg
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/icon-viewlink.svg
+User admin4 accessed /static/admin/img/icon-no.svg
+User admin4 accessed /static/admin/js/filters.js
+User admin4 accessed /static/admin/img/sorting-icons.svg
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/tooltag-add.svg
+User admin4 accessed /admin/accounts/customuser/2/change/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/calendar.js
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/js/admin/DateTimeShortcuts.js
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/SelectBox.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/SelectFilter2.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/prepopulate_init.js
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/change_form.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/img/icon-unknown.svg
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/icon-unknown-alt.svg
+User admin4 accessed /static/admin/img/selector-icons.svg
+User admin4 accessed /static/admin/img/icon-clock.svg
+User admin4 accessed /static/admin/img/icon-calendar.svg
+User admin4 accessed /admin/accounts/customuser/2/password/
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/unusable_password_field.css
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/js/unusable_password_field.js
+User updated profile: admin1
+User admin4 accessed /admin/accounts/customuser/2/password/
+User admin4 accessed /admin/accounts/customuser/2/change/
+User admin4 accessed /static/admin/css/base.css
+User admin4 accessed /static/admin/css/forms.css
+User admin4 accessed /static/admin/css/nav_sidebar.css
+User admin4 accessed /static/admin/css/dark_mode.css
+User admin4 accessed /static/admin/css/responsive.css
+User admin4 accessed /static/admin/js/theme.js
+User admin4 accessed /admin/jsi18n/
+User admin4 accessed /static/admin/js/vendor/jquery/jquery.js
+User admin4 accessed /static/admin/js/jquery.init.js
+User admin4 accessed /static/admin/js/calendar.js
+User admin4 accessed /static/admin/js/core.js
+User admin4 accessed /static/admin/js/admin/RelatedObjectLookups.js
+User admin4 accessed /static/admin/js/admin/DateTimeShortcuts.js
+User admin4 accessed /static/admin/js/SelectBox.js
+User admin4 accessed /static/admin/js/SelectFilter2.js
+User admin4 accessed /static/admin/css/widgets.css
+User admin4 accessed /static/admin/js/urlify.js
+User admin4 accessed /static/admin/js/actions.js
+User admin4 accessed /static/admin/js/prepopulate.js
+User admin4 accessed /static/admin/js/prepopulate_init.js
+User admin4 accessed /static/admin/js/vendor/xregexp/xregexp.js
+User admin4 accessed /static/admin/js/nav_sidebar.js
+User admin4 accessed /static/admin/img/icon-addlink.svg
+User admin4 accessed /static/admin/js/change_form.js
+User admin4 accessed /static/admin/img/icon-yes.svg
+User admin4 accessed /static/admin/img/icon-unknown.svg
+User admin4 accessed /static/admin/img/icon-clock.svg
+User admin4 accessed /static/admin/img/icon-unknown-alt.svg
+User admin4 accessed /static/admin/img/search.svg
+User admin4 accessed /static/admin/img/selector-icons.svg
+User admin4 accessed /static/admin/img/icon-calendar.svg
+User logged out: admin4
+User updated profile: admin1
+User logged in: admin1
+User admin1 accessed /accounts/login/
+User admin1 accessed /accounts/profile/
+User admin1 accessed /accounts/profile/job_seeker/2/
+User admin1 accessed /static/css/minty.min.css
+User admin1 accessed /media/profile_pictures/heihei_a8AMNVk.jpg
+User admin1 accessed /media/resumes/Group_1_-_SOFTWARE_sJE6NIV.pdf
+User admin1 accessed /notifications/
+User admin1 accessed /static/css/minty.min.css
+User admin1 accessed /jobs/job/59/
+User admin1 accessed /static/css/minty.min.css
+User admin1 accessed /media/company_logos/amd.jpg
+User admin1 accessed /jobs/jobs/59/apply/
+User admin1 accessed /jobs/job/59/
+User admin1 accessed /static/css/minty.min.css
+User admin1 accessed /jobs/job/58/
+User admin1 accessed /static/css/minty.min.css
